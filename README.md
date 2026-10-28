@@ -1,5 +1,7 @@
 # Child profiles and foundational learning in Jamaica (MICS6 2022)
 
+This is the analysis code for a research project on how Grade 2–3 children in Jamaica group together based on their home, school and personal circumstances. It then checks how reading and numeracy skills differ across those groups, using the 2022 MICS6 survey data.
+
 ## Goal
 Identify different profiles of Grade 2 - 3 children from their individual, household, school support and protection circumstances, then compare foundational reading and numeracy proficiency across profiles (SDG 4.1.1a). Method adapted from Alvarez-Garcia et al. (2024), Uncovering student profiles (MCA, weighted k-means, classifier + SHAP). Profiles are built without the outcomes.
 
