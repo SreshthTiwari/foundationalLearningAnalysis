@@ -1,0 +1,15 @@
+{
+  "k_final": 3,
+  "k_chosen_by": "auto",
+  "n_mca_dims_kept": 6,
+  "n_features": 14,
+  "seed": 42,
+  "n_bootstrap": 100,
+  "ks_tried": [
+    2,
+    3,
+    4,
+    5,
+    6
+  ]
+}

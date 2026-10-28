@@ -1,0 +1,20 @@
+{
+  "n": 368,
+  "n_clusters": 3,
+  "cluster_sizes": [
+    193,
+    144,
+    31
+  ],
+  "majority_class_baseline": 0.524,
+  "models": [
+    "RandomForest",
+    "XGBoost"
+  ],
+  "primary_model": "XGBoost",
+  "shap_rank_agreement_oof_vs_insample": 0.991,
+  "nmi_cluster_wealth": 0.241,
+  "cv_repeats": 3,
+  "cv_folds": 5,
+  "seed": 42
+}

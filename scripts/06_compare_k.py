@@ -3,29 +3,32 @@
 Selection criteria use contextual variables only. Outcome rates are shown for information
 and must not drive the choice (that would leak the outcomes into the profiles).
 
-Outputs (outputs/):
+Outputs (outputs/06_k_comparison/):
   k_comparison.csv      metrics per (MCA dimensions, k)
   k_top_levels.csv      the most distinctive feature levels per cluster for each k (main dims)
+  console_log.txt       everything this script printed
 """
-from pathlib import Path
-
 import numpy as np
 import pandas as pd
 import prince
 from sklearn.cluster import KMeans
 from sklearn.metrics import (adjusted_rand_score, calinski_harabasz_score, silhouette_score)
 
-OUT = Path(__file__).parent / "outputs"
-SEED, KS, BOOT = 42, range(2, 9), 200
-DIMS = [3, 4, 6]          # 6 = the dimensionality used in step 3
-d = pd.read_csv(OUT / "analytic.csv")
-feats = [c for c in d.columns if c.startswith("f_")]
+import config
+
+OUT = config.ensure(config.OUT_K_COMPARE)
+config.log_console(OUT)
+SEED, KS, BOOT = config.SEED, config.KS_COMPARE, config.BOOT_COMPARE
+DIMS = config.DIMS_COMPARE          # 6 = the dimensionality used in step 3
+d = pd.read_csv(config.ANALYTIC_CSV)
+feats = [c for c in d.columns if c.startswith(config.FEATURE_PREFIX)]
 w = d["weight"].to_numpy()
 X = d[feats].copy()
 for c in feats:
     X[c] = X[c].fillna(X[c].mode()[0])
 
-mca = prince.MCA(n_components=10, n_iter=10, one_hot=True, random_state=SEED).fit(X)
+mca = prince.MCA(n_components=config.MCA_COMPONENTS, n_iter=config.MCA_N_ITER, one_hot=True,
+                 random_state=SEED).fit(X)
 coords = mca.row_coordinates(X).to_numpy()
 
 
@@ -54,7 +57,7 @@ for nd in DIMS:
             for c in range(1, k + 1):  # best-matching bootstrap cluster (Jaccard), clusterboot-style
                 A = lab == c
                 jac[b, c - 1] = max((A & (pb == j)).sum() / (A | (pb == j)).sum() for j in range(k))
-        seeds = [adjusted_rand_score(m.labels_, km(Z, k, w, s, 5).labels_) for s in range(100, 110)]
+        seeds = [adjusted_rand_score(m.labels_, km(Z, k, w, s, 5).labels_) for s in range(config.STABILITY_SEED_START, config.STABILITY_SEED_START + 10)]
 
         r = dict(dims=nd, k=k, silhouette=silhouette_score(Z, lab), calinski_harabasz=calinski_harabasz_score(Z, lab),
                  wss=m.inertia_, boot_ari_mean=np.mean(boot), boot_ari_p10=np.percentile(boot, 10),
@@ -63,7 +66,7 @@ for nd in DIMS:
                  min_cluster_jaccard=jac.mean(axis=0).min(),
                  jaccard_by_cluster="/".join(f"{x:.2f}" for x in jac.mean(axis=0)))
         # outcomes, information only
-        for o in ["reading_strict", "numeracy_strict"]:
+        for o in config.OUTCOMES_PRIMARY:
             ok = d[o].notna().to_numpy()
             rates = [np.average(d[o][ok & (lab == c)], weights=w[ok & (lab == c)]) * 100
                      if (ok & (lab == c)).sum() else np.nan for c in range(1, k + 1)]
@@ -103,4 +106,4 @@ print(res[res.dims == 6][["k", "n_reading_by_cluster", "reading_strict_by_cluste
       .to_string(index=False))
 print("\n=== Most distinctive levels per cluster, dims=6 ===")
 print(pd.DataFrame(top_rows).to_string(index=False))
-print("\nSaved k_comparison.csv and k_top_levels.csv to", OUT)
+print("\nSaved k_comparison.csv, k_top_levels.csv and console_log.txt to", OUT)

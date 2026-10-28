@@ -1,0 +1,9 @@
+task,variable,n_non_missing,n_coded_no_response
+reading,FL20A,238,0.0
+reading,FL20B,238,2.0
+reading,FL21BA,195,0.0
+reading,FL21BE,195,1.0
+numeracy,FL23A,368,
+numeracy,FL24A,355,
+numeracy,FL25A,355,
+numeracy,FL27A,346,

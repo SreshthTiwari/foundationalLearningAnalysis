@@ -11,30 +11,37 @@ Outcome definitions (UNICEF MICS6 foundational learning module, SDG 4.1.1a):
 Looser versions (3-of-5 comprehension, 3-of-4 numeracy tasks) are kept as
 sensitivity outcomes.
 
-Output: outputs/analytic.csv   (f_* = clustering features, d_* = descriptive only)
+Outputs (outputs/02_analytic_dataset/):
+  analytic.csv                  one row per child (f_* = clustering features, d_* = descriptive only)
+  reading_status_counts.csv     how many children fall in each reading status
+  outcome_rates.csv             unweighted and weighted outcome rates
+  numeracy_task_pass_rates.csv  unweighted pass rate per numeracy task
+  feature_levels.csv            missing share and level counts for every clustering feature
+  digital_vs_online_learning.csv  routing check for the merged digital-resources feature
+  console_log.txt               everything this script printed
 """
 import math
-from pathlib import Path
 
 import numpy as np
 import pandas as pd
 import pyreadstat
 
-ROOT = Path(__file__).parent
-OUT = ROOT / "outputs"
-OUT.mkdir(exist_ok=True)
+import config
 
-df, meta = pyreadstat.read_sav(ROOT / "fs.sav")
+OUT = config.ensure(config.OUT_ANALYTIC)
+config.log_console(OUT)
+
+df, meta = pyreadstat.read_sav(config.FS_SAV)
 vl = meta.variable_value_labels
 
 # Sample: Grade 2-3 primary pupils with a completed FL interview
-stageA = (df["CB7"] == 1) & (df["CB8A"] == 1) & df["CB8B"].isin([2, 3])
-d = df[stageA & (df["FL28"] == 1)].copy()
+stageA = config.stage_a_mask(df)
+d = df[stageA & (df["FL28"] == config.COMPLETED)].copy()
 print(f"Analytic sample: {len(d)} children (Stage A = {int(stageA.sum())})")
 
 # ---------------------------------------------------------------- outcomes
-N_WORDS = 72
-MIN_CORRECT = math.ceil(0.9 * N_WORDS)  # 65
+N_WORDS = config.N_WORDS
+MIN_CORRECT = math.ceil(config.MIN_WORD_SHARE * N_WORDS)  # 65
 words = d[[f"FL19W{i}" for i in range(1, N_WORDS + 1)]]
 d["words_correct"] = (words == 0).sum(axis=1)
 has_story = d["FL19INTRO"].notna()
@@ -129,18 +136,31 @@ def wrate(y, w):
 
 
 print("\n=== Outcomes ===")
-print("reading_status:\n", out["reading_status"].value_counts().to_string())
+status = out["reading_status"].value_counts()
+print("reading_status:\n", status.to_string())
+status.rename_axis("reading_status").rename("n").reset_index().to_csv(OUT / "reading_status_counts.csv", index=False)
+rate_rows = []
 for o in ["reading_strict", "reading_lenient", "reading_strict_incl", "numeracy_strict", "numeracy_lenient"]:
     r, n = wrate(out[o], out["weight"])
     print(f"{o:17s} n={n:3d}  unweighted={out[o].mean()*100:5.1f}%  weighted={r:5.1f}%")
-print("Numeracy task pass rates (unweighted):",
-      {t: round(passed[t].mean() * 100, 1) for t in TASKS})
+    rate_rows.append(dict(outcome=o, n=n, unweighted_pct=round(out[o].mean() * 100, 1), weighted_pct=round(r, 1)))
+pd.DataFrame(rate_rows).to_csv(OUT / "outcome_rates.csv", index=False)
+task_rates = {t: round(passed[t].mean() * 100, 1) for t in TASKS}
+print("Numeracy task pass rates (unweighted):", task_rates)
+pd.Series(task_rates, name="pass_rate_pct").rename_axis("task").reset_index().to_csv(
+    OUT / "numeracy_task_pass_rates.csv", index=False)
 
 print("\n=== Features: missing share and levels ===")
+level_rows = []
 for c in f.columns:
     vc = f[c].value_counts(dropna=False)
     print(f"{c:18s} missing={f[c].isna().mean()*100:4.1f}%  " +
           ", ".join(f"{k}={v}" for k, v in vc.items()))
+    level_rows.append(dict(feature=c, missing_pct=round(f[c].isna().mean() * 100, 1),
+                           levels="; ".join(f"{k}={v}" for k, v in vc.items())))
+pd.DataFrame(level_rows).to_csv(OUT / "feature_levels.csv", index=False)
 print("\nDigital resources vs online learning:")
-print(pd.crosstab(d["CB10D"].map(vl["CB10D"]), f["f_digital_resources"]).to_string())
+dig = pd.crosstab(d["CB10D"].map(vl["CB10D"]), f["f_digital_resources"])
+print(dig.to_string())
+dig.to_csv(OUT / "digital_vs_online_learning.csv")
 print("\nSaved", OUT / "analytic.csv", out.shape)

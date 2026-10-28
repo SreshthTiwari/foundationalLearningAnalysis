@@ -1,0 +1,5 @@
+variable,label,value_labels
+CB7,Attended school or early childhood programme during current school year,"{1.0: 'YES', 2.0: 'NO', 9.0: 'NO RESPONSE'}"
+CB8A,Level of education attended current school year,"{0.0: 'ECE', 1.0: 'PRIMARY', 2.0: 'LOWER SECONDARY', 3.0: 'UPPER SECONDARY', 4.0: 'HIGHER', 5.0: 'SPECIAL EDUCATION', 9.0: 'NO RESPONSE'}"
+CB8B,Grade attended at that level attended current school year,"{1.0: 'GRADE 1', 2.0: 'GRADE 2', 3.0: 'GRADE 3', 4.0: 'GRADE 4', 5.0: 'GRADE 5', 6.0: 'GRADE 6', 7.0: 'GRADE 7', 8.0: 'GRADE 8', 99.0: 'NO RESPONSE'}"
+FL28,Result of interview with child,"{1.0: 'COMPLETED', 2.0: 'NOT AT HOME', 3.0: 'MOTHER / CARETAKER REFUSED', 4.0: 'CHILD REFUSED', 5.0: 'PARTLY COMPLETED', 6.0: 'INCAPACITATED', 96.0: 'OTHER'}"

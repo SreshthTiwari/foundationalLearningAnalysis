@@ -11,19 +11,26 @@ strata with one PSU are centred on the overall PSU mean (survey's "adjust" rule)
 t-based inference with df = #PSUs - #strata. Rows lacking the outcome stay in the design
 as zero contributions (domain estimation), so the PSU structure is the full sample's.
 
-Output: outputs/regression_odds_ratios.csv
+Outputs (outputs/05_survey_regression/):
+  regression_odds_ratios.csv   odds ratios, 95% CIs and p-values for every model term
+  cluster_or_m0_vs_m1.csv      cluster odds ratios side by side, M0 vs M1
+  wald_tests.csv               design-based Wald F tests (cluster, wealth, mother's education)
+  design_summary.csv           PSUs, strata, df, reference cluster, children dropped
+  svy_cov_self_check.txt       result of the sandwich-covariance self-check
+  console_log.txt              everything this script printed
 """
-from pathlib import Path
-
 import numpy as np
 import pandas as pd
 import statsmodels.api as sm
 from patsy import dmatrices
 from scipy import stats
 
-OUT = Path(__file__).parent / "outputs"
-d = pd.read_csv(OUT / "analytic.csv")
-d["cluster"] = pd.read_csv(OUT / "clusters.csv")["cluster"]
+import config
+
+OUT = config.ensure(config.OUT_REGRESSION)
+config.log_console(OUT)
+d = pd.read_csv(config.ANALYTIC_CSV)
+d["cluster"] = pd.read_csv(config.CLUSTERS_CSV)["cluster"]
 
 
 def svy_cov(X, y, p, w, strata, psu):
@@ -45,13 +52,14 @@ def svy_cov(X, y, p, w, strata, psu):
 
 # --- self-check: with unit weights and every row its own PSU in one stratum, the result
 # --- must equal statsmodels' HC0 covariance times n/(n-1).
-rng = np.random.default_rng(0)
+rng = np.random.default_rng(config.SELF_CHECK_SEED)
 Xc = sm.add_constant(rng.normal(size=(200, 2)))
 yc = (rng.random(200) < 1 / (1 + np.exp(-(Xc @ [0.2, 0.8, -0.5])))).astype(float)
 fc = sm.GLM(yc, Xc, family=sm.families.Binomial()).fit(cov_type="HC0")
 mine = svy_cov(Xc, yc, fc.predict(Xc), np.ones(200), np.zeros(200), np.arange(200)) * (199 / 200)
 assert np.allclose(mine, fc.cov_params(), rtol=1e-6), "svy_cov self-check failed"
 print("svy_cov self-check vs statsmodels HC0: passed")
+(OUT / "svy_cov_self_check.txt").write_text("svy_cov self-check vs statsmodels HC0 (rtol=1e-6): passed\n")
 
 n_psu = d[["stratum", "psu"]].drop_duplicates().shape[0]
 n_strata = d["stratum"].nunique()
@@ -61,10 +69,13 @@ print(f"Design: {n_psu} PSUs, {n_strata} strata, df = {DF}; reference cluster = 
 
 # Same children in both models: drop the few with missing mother's education (outcome -> NaN,
 # so they stay in the design as zero-contribution rows).
-OUTCOMES = ["reading_strict", "numeracy_strict"]
+OUTCOMES = config.OUTCOMES_PRIMARY
 dd = d.copy()
 dd.loc[dd["f_mother_edu"].isna(), OUTCOMES] = np.nan
 print(f"Children dropped for missing mother's education: {int(d['f_mother_edu'].isna().sum())}")
+pd.DataFrame([dict(n_psu=n_psu, n_strata=n_strata, design_df=DF, reference_cluster=ref,
+                   dropped_missing_mother_edu=int(d["f_mother_edu"].isna().sum()))]
+             ).to_csv(OUT / "design_summary.csv", index=False)
 
 CL = f"C(cluster, Treatment(reference={ref}))"
 WE = "C(f_wealth, Treatment(reference='lower_40'))"
@@ -99,7 +110,7 @@ def wald(names, beta, V, prefix):
 
 
 tcrit = stats.t.ppf(0.975, DF)
-rows = []
+rows, test_rows = [], []
 for o in OUTCOMES:
     for m, rhs in MODELS.items():
         names, beta, V, n = fit(o, rhs)
@@ -114,12 +125,15 @@ for o in OUTCOMES:
             tests += [("wealth", *wald(names, beta, V, "wealth[")),
                       ("mother_edu", *wald(names, beta, V, "mother_edu["))]
         print(f"{o} {m} (n={n}): " + "; ".join(f"{t} F({q},{DF})={F:.2f} p={p:.4f}" for t, F, q, p in tests))
+        test_rows += [dict(outcome=o, model=m, term=t, F=F, df_num=q, df_den=DF, p=p, n=n) for t, F, q, p in tests]
 
 res = pd.DataFrame(rows).round(3)
 res.to_csv(OUT / "regression_odds_ratios.csv", index=False)
+pd.DataFrame(test_rows).round(4).to_csv(OUT / "wald_tests.csv", index=False)
 print("\n=== Cluster odds ratios, M0 (cluster + grade + age) vs M1 (+ wealth + mother's education) ===")
 cl = res[res.term.str.startswith("cluster")].pivot(index=["outcome", "term"], columns="model",
                                                     values=["OR", "lo", "hi", "p"])
 print(cl.round(3).to_string())
+cl.round(3).to_csv(OUT / "cluster_or_m0_vs_m1.csv")
 print("\n=== Full table ===\n", res.to_string(index=False))
-print("\nAbsolute rates per cluster with design-based CIs are in proficiency_by_cluster.csv (step 4).")
+print("\nAbsolute rates per cluster with design-based CIs are in 04_outcomes_by_cluster/proficiency_by_cluster.csv (step 4).")

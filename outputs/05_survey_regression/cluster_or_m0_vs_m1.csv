@@ -1,0 +1,7 @@
+,,OR,OR,lo,lo,hi,hi,p,p
+model,,M0,M1,M0,M1,M0,M1,M0,M1
+outcome,term,,,,,,,,
+numeracy_strict,cluster[T.2],0.445,0.982,0.247,0.463,0.802,2.085,0.007,0.962
+numeracy_strict,cluster[T.3],0.663,0.953,0.237,0.329,1.858,2.759,0.433,0.928
+reading_strict,cluster[T.2],0.215,0.354,0.119,0.163,0.39,0.767,0.0,0.009
+reading_strict,cluster[T.3],0.256,0.303,0.099,0.106,0.666,0.866,0.005,0.026

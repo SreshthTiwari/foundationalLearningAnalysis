@@ -1,0 +1,15 @@
+feature,missing_pct,levels
+f_wealth,0.0,lower_40=152; upper_40=138; middle=78
+f_mother_edu,0.5,upper_sec=179; post_sec=118; lower_sec_or_less=69; nan=2
+f_area,0.0,rural=180; GKMA=99; other_urban=89
+f_books,0.3,many_10plus=161; few_0_4=146; some_5_9=60; nan=1
+f_hw_help,0.0,yes=339; no=21; no_homework=8
+f_pta,2.2,yes=285; no=75; nan=8
+f_school_visit,0.0,yes=288; no=80
+f_disability,0.0,no=340; yes=28
+f_emo_difficulty,0.3,rarely=331; monthly_or_more=36; nan=1
+f_psych_aggr,0.0,yes=274; no=94
+f_phys_punish,0.0,yes=226; no=142
+f_online_learning,0.0,daily=271; weekly=68; rarely_never=29
+f_digital_resources,0.0,home_internet_and_own_device=268; limited_or_none=100
+f_econ_work,0.0,no=329; yes=39

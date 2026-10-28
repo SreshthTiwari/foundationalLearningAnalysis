@@ -1,0 +1,11 @@
+variable,label,level,share_not_assessed,share_assessed
+HL4,Sex,FEMALE,0.462,0.549
+HL4,Sex,MALE,0.538,0.451
+windex5,Wealth index quintile,Fourth,0.192,0.177
+windex5,Wealth index quintile,Middle,0.308,0.212
+windex5,Wealth index quintile,Poorest,0.192,0.209
+windex5,Wealth index quintile,Richest,0.192,0.198
+windex5,Wealth index quintile,Second,0.115,0.204
+HH6,Area,Greater Kingston Metropolitan Area (GKMA),0.346,0.269
+HH6,Area,Other Urban Centers (OUC),0.154,0.242
+HH6,Area,Rural,0.5,0.489

@@ -1,0 +1,80 @@
+=== Weighted proficiency by cluster (design df = 207; 234 PSUs, 27 strata) ===
+cluster   n  weighted_share_pct  reading_strict_n  reading_strict_pct reading_strict_ci  numeracy_strict_n  numeracy_strict_pct numeracy_strict_ci
+    All 368               100.0               332                44.1         37.9-50.4                368                 28.9          23.3-34.5
+      1 193                49.3               178                60.6         52.4-68.8                193                 35.9          28.1-43.6
+      2 144                40.9               128                27.0         18.2-35.8                144                 20.8          13.1-28.4
+      3  31                 9.8                26                29.7         10.1-49.3                 31                 27.6           7.9-47.2
+
+Sensitivity definitions (3-of-5 comprehension; 3-of-4 numeracy tasks; reading with not-assessed children counted as not proficient):
+cluster  reading_lenient_pct reading_lenient_ci  numeracy_lenient_pct numeracy_lenient_ci  reading_strict_incl_pct reading_strict_incl_ci
+    All                 53.3          47.0-59.6                  51.6           44.8-58.4                     40.5              34.8-46.1
+      1                 69.8          62.1-77.5                  64.2           56.0-72.5                     56.3              48.7-63.8
+      2                 36.2          26.2-46.1                  40.7           30.8-50.6                     24.4              16.4-32.5
+      3                 38.9          15.6-62.3                  33.2           12.7-53.7                     27.9              10.4-45.4
+
+=== Strict outcomes by cluster for each k (see proficiency_by_k.csv) ===
+ k  cluster   n  reading_strict  numeracy_strict
+ 2        1 216            57.6             36.2
+ 2        2 152            25.9             19.4
+ 3        1 193            60.6             35.9
+ 3        2 144            27.0             20.8
+ 3        3  31            29.7             27.6
+ 4        1 125            29.2             18.1
+ 4        2 138            68.4             37.7
+ 4        3  76            37.1             36.0
+ 4        4  29            23.3             22.8
+ 5        1  98            31.2             16.6
+ 5        2 110            58.5             31.0
+ 5        3  66            27.9             27.4
+ 5        4  67            67.6             50.3
+ 5        5  27            24.6             23.9
+ 6        1  93            29.7             19.6
+ 6        2 109            59.7             29.3
+ 6        3  67            66.5             50.1
+ 6        4  51            33.3             26.0
+ 6        5  32            17.2              8.6
+ 6        6  16            35.2             47.8
+
+=== XGBoost predicting cluster from the original features ===
+5-fold CV accuracy = 0.899  (explanatory only: labels derive from these variables)
+
+Top global features (mean |SHAP|):
+ f_disability_no                                     0.529
+f_wealth_lower_40                                   0.449
+f_digital_resources_home_internet_and_own_device    0.315
+f_emo_difficulty_monthly_or_more                    0.311
+f_books_few_0_4                                     0.305
+f_mother_edu_post_sec                               0.247
+f_online_learning_rarely_never                      0.230
+f_online_learning_daily                             0.219
+f_wealth_upper_40                                   0.164
+f_pta_no                                            0.159
+
+Top features per cluster (member_minus_other > 0 = more common in cluster):
+ cluster                                          feature  mean_abs_shap  member_minus_other
+       1                                f_wealth_lower_40          0.692               -0.61
+       1                                  f_books_few_0_4          0.642               -0.45
+       1 f_digital_resources_home_internet_and_own_device          0.555                0.47
+       1                          f_online_learning_daily          0.452                0.40
+       1                            f_mother_edu_post_sec          0.371                0.32
+       1                                         f_pta_no          0.251               -0.23
+       1                                 f_phys_punish_no          0.172                0.22
+       1                                  f_psych_aggr_no          0.162                0.15
+       2                                f_wealth_lower_40          0.626                0.60
+       2                                f_wealth_upper_40          0.350               -0.50
+       2 f_digital_resources_home_internet_and_own_device          0.349               -0.43
+       2                            f_mother_edu_post_sec          0.340               -0.31
+       2                                 f_phys_punish_no          0.239               -0.20
+       2                                  f_books_few_0_4          0.234                0.40
+       2                         f_online_learning_weekly          0.178                0.23
+       2                                     f_area_rural          0.175                0.17
+       3                                  f_disability_no          1.393               -0.76
+       3                 f_emo_difficulty_monthly_or_more          0.775                0.56
+       3                   f_online_learning_rarely_never          0.663                0.37
+       3                                 f_disability_yes          0.368                0.76
+       3                                    f_hw_help_yes          0.322               -0.27
+       3                                f_school_visit_no          0.123                0.04
+       3                          f_emo_difficulty_rarely          0.121               -0.56
+       3                   f_mother_edu_lower_sec_or_less          0.092                0.08
+
+Saved outputs to /Users/sreshthtiwari/Desktop/jamaica_research/outputs/04_outcomes_by_cluster

@@ -1,0 +1,6 @@
+outcome,n,unweighted_pct,weighted_pct
+reading_strict,332,45.5,44.1
+reading_lenient,332,55.4,53.3
+reading_strict_incl,368,42.1,40.5
+numeracy_strict,368,29.9,28.9
+numeracy_lenient,368,52.2,51.6

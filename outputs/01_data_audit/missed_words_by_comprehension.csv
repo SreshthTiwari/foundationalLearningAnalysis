@@ -1,0 +1,3 @@
+has_comprehension_answers,count,mean,std,min,25%,50%,75%,max
+False,43.0,11.2,10.8,0.0,4.5,10.0,13.0,52.0
+True,195.0,0.8,1.6,0.0,0.0,0.0,1.0,7.0

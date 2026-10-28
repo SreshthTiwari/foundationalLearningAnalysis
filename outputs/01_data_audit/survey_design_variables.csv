@@ -1,0 +1,5 @@
+variable,label,missing,n_unique,min,max
+fsweight,Children 5-17's sample weight,0,311,0.27927759735093194,6.9434529973872605
+fshweight,Children 5-17's household sample weight,0,229,0.27061648629633045,4.411764118334319
+PSU,Primary sampling unit,0,243,3.0,390.0
+stratum,Stratum,0,27,1.0,28.0

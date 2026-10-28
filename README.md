@@ -4,23 +4,44 @@
 Identify different profiles of Grade 2 - 3 children from their individual, household, school support and protection circumstances, then compare foundational reading and numeracy proficiency across profiles (SDG 4.1.1a). Method adapted from Alvarez-Garcia et al. (2024), Uncovering student profiles (MCA, weighted k-means, classifier + SHAP). Profiles are built without the outcomes.
 
 ## Important files
-- Data: `fs.sav` (MICS6 children 5–17; the only dataset used). `Jamaica MICS6 Datasets/` holds the others (hh, hl, wm, ch) and the Readme, unused.
-- Docs: handover PDF (`Jamaica_Child_Development_Conference_Current_Summary.pdf`), the PISA reference paper, `MICS6-manual-for-stats-data-analysis-English_2020.pdf` (used to verify scoring and weights).
-- `prelim_sorting.ipynb`: the old exploratory notebook; superseded, not used.
-- Code: `01`–`07_*.py` (below), `requirements.txt`. Outputs go to `outputs/` and `outputs/explainable/`.
+- `data/fs.sav`: MICS6 children 5–17; the only dataset used. `Jamaica MICS6 Datasets/` holds the others (hh, hl, wm, ch) and the Readme, unused.
+- `docs/`: handover PDF (`Jamaica_Child_Development_Conference_Current_Summary.pdf`), the PISA reference paper, `MICS6-manual-for-stats-data-analysis-English_2020.pdf` (used to verify scoring and weights).
+- `prelim_sorting.ipynb`: the old exploratory notebook; superseded, not used (its `fs.sav` path points at `data/fs.sav`).
+- `scripts/`: `config.py` (all paths, seeds, codes and settings) and the step scripts `01`–`07_*.py` (below).
+- `run_full_pipeline.py`: runs 01–07 in order and writes the provenance manifest.
+- `requirements.txt`: exact pinned versions.
+- `outputs/`: one folder per step (listed below) plus `provenance/` and the hand-written `results_summary.md`.
 
-## Run (from this folder; Python 3.13 venv in `.venv`, already built)
+## Run (Python 3.13 venv in `.venv`, already built)
 ```
-.venv/bin/pip install -r requirements.txt     # only if .venv is missing
-.venv/bin/python 01_data_audit.py
-.venv/bin/python 02_build_dataset.py
-.venv/bin/python 03_profiles.py [--k N]       # default: auto-picks k in 3..6 (gives k=3)
-.venv/bin/python 04_explain_and_outcomes.py
-.venv/bin/python 05_survey_inference.py
-.venv/bin/python 06_compare_k.py              # does not change clusters.csv
-.venv/bin/python 07_explainable_ml.py         # writes only to outputs/explainable/
+.venv/bin/pip install -r requirements.txt            # only if .venv is missing
+.venv/bin/python /abs/path/to/run_full_pipeline.py [--k N]   # all steps; --k forces k in step 03
 ```
-Steps are deterministic (seed 42) and run in order; 03 writes `clusters.csv`, which 04–07 read.
+Or one step at a time (each is runnable on its own, in this order):
+```
+.venv/bin/python scripts/01_data_audit.py
+.venv/bin/python scripts/02_build_dataset.py
+.venv/bin/python scripts/03_profiles.py [--k N]       # default: auto-picks k in 3..6 (gives k=3)
+.venv/bin/python scripts/04_explain_and_outcomes.py
+.venv/bin/python scripts/05_survey_inference.py
+.venv/bin/python scripts/06_compare_k.py              # does not change clusters.csv
+.venv/bin/python scripts/07_explainable_ml.py
+```
+Steps are deterministic (seed 42, set in `scripts/config.py`) and run in order; 03 writes `clusters.csv`, which 04–07 read. Every step also saves what it prints to `console_log.txt` in its output folder.
+
+## Outputs (`outputs/`)
+| Folder | Written by | Contents |
+|---|---|---|
+| `01_data_audit/` | 01 | sample flow, variable audit, eligibility labels, reading-routing checks, assessed vs not, survey design summaries |
+| `02_analytic_dataset/` | 02 | `analytic.csv`, outcome rates, feature levels, routing check |
+| `03_cluster_profiles/` | 03 | `clusters.csv`, diagnostics, profiles, MCA eigenvalues, cluster sizes, chosen-k settings |
+| `04_outcomes_by_cluster/` | 04 | weighted proficiency by cluster and by k; `shap_preliminary/` (quick XGBoost + SHAP) |
+| `05_survey_regression/` | 05 | odds ratios (M0 vs M1), Wald tests, design summary, covariance self-check |
+| `06_k_comparison/` | 06 | k = 2–8 × MCA dims comparison, distinctive levels per k |
+| `07_explainable_ml/` | 07 | classifier metrics, ablation, SHAP tables, `fig1`–`fig4`, `run_summary.json`, hand-written `report.md` |
+| `provenance/` | pipeline | `run_manifest.json`: python and package versions, git commit, all settings and seeds, input and output hashes, step timings |
+
+`results_summary.md` (hand-written) sits at the top of `outputs/`. Re-running the pipeline overwrites the generated files but not `results_summary.md` or `07_explainable_ml/report.md`.
 
 ## What each step does (all done)
 | Step | Result |

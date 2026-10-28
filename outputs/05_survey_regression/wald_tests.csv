@@ -1,0 +1,9 @@
+outcome,model,term,F,df_num,df_den,p,n
+reading_strict,M0,cluster,14.1212,2,207,0.0,330
+reading_strict,M1,cluster,4.3878,2,207,0.0136,330
+reading_strict,M1,wealth,3.2657,2,207,0.0401,330
+reading_strict,M1,mother_edu,1.0354,2,207,0.3569,330
+numeracy_strict,M0,cluster,3.6788,2,207,0.0269,366
+numeracy_strict,M1,cluster,0.0042,2,207,0.9959,366
+numeracy_strict,M1,wealth,4.6328,2,207,0.0108,366
+numeracy_strict,M1,mother_edu,0.3349,2,207,0.7158,366

@@ -1,6 +1,6 @@
 # Results summary (k = 3, n = 368 Grade 2–3 children, MICS6 Jamaica 2022)
 
-All estimates are survey-weighted (`fsweight`) with design-based 95% CIs (strata, PSUs). Clusters were built without reading or numeracy. Everything is association, not cause. Sources: `proficiency_by_cluster.csv` (04), `regression_odds_ratios.csv` (05), `k_comparison.csv` (06), `explainable/` (07).
+All estimates are survey-weighted (`fsweight`) with design-based 95% CIs (strata, PSUs). Clusters were built without reading or numeracy. Everything is association, not cause. Sources: `04_outcomes_by_cluster/proficiency_by_cluster.csv` (04), `05_survey_regression/regression_odds_ratios.csv` (05), `06_k_comparison/k_comparison.csv` (06), `07_explainable_ml/` (07).
 
 ## 1. Proficiency by cluster
 Strict MICS definitions (reading: ≥90% of words + all 5 comprehension; numeracy: all items in all 4 tasks).
@@ -48,7 +48,7 @@ At 6 MCA dimensions (the step-3 setting):
 
 At 3 MCA dimensions k=3 is more stable (ARI 0.74; cluster Jaccards 0.82/0.86/0.73). k≥5 clusters are single-variable groups with <25 children.
 
-## 4. What defines the clusters (07; details in `explainable/report.md`)
+## 4. What defines the clusters (07; details in `07_explainable_ml/report.md`)
 - XGBoost predicts cluster from the original features: accuracy 0.921, balanced accuracy 0.900 (Random Forest 0.895/0.868; baseline 0.524). Errors are mostly between clusters 1 and 2. Cluster 3: precision 0.81, recall 0.85 (CI 0.71–0.95).
 - Cluster 1: wealthier (60% upper 40% vs 36% overall), mother post-secondary (48 vs 32), 10+ books (64 vs 43), home internet and own device (96 vs 70), daily online learning (94 vs 75), PTA (91 vs 80), no functional difficulty.
 - Cluster 2: lower 40% wealth (81 vs 45), 0–4 books (68 vs 41), limited digital resources (58 vs 30), more physical punishment (74 vs 61), more child work (18 vs 10).

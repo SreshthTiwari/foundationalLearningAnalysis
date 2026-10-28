@@ -1,0 +1,97 @@
+=== Context-only criteria ===
+ dims  k  silhouette  calinski_harabasz  boot_ari_mean  boot_ari_p10  seed_ari_min  min_n  min_weighted_pct  ari_vs_prev_k
+    3  2       0.281            151.843          0.543         0.194         0.904    176            48.958            NaN
+    3  3       0.295            151.185          0.738         0.459         0.916     37            11.117          0.633
+    3  4       0.315            162.760          0.668         0.363         0.939     28             8.630          0.634
+    3  5       0.301            164.892          0.676         0.389         0.491     21             7.216          0.595
+    3  6       0.305            164.363          0.650         0.464         0.455     21             7.216          0.612
+    3  7       0.312            160.662          0.635         0.453         0.560     12             4.315          0.914
+    3  8       0.301            161.616          0.653         0.471         0.614     12             4.315          0.616
+    4  2       0.243            116.002          0.661         0.267         0.691    147            42.402            NaN
+    4  3       0.246            104.941          0.682         0.403         0.593     30             9.152          0.780
+    4  4       0.247            108.934          0.590         0.361         0.570     29             8.779          0.498
+    4  5       0.257            115.270          0.705         0.458         0.714     27             8.470          0.432
+    4  6       0.252            110.978          0.592         0.485         0.483     28             9.044          0.666
+    4  7       0.252            108.231          0.616         0.510         0.552     23             7.505          0.757
+    4  8       0.262            105.501          0.639         0.515         0.519     14             4.700          0.920
+    6  2       0.187             80.309          0.612         0.211         0.946    152            43.567            NaN
+    6  3       0.187             69.747          0.667         0.420         0.417     31             9.794          0.729
+    6  4       0.173             66.725          0.524         0.317         0.530     36            10.749          0.471
+    6  5       0.177             62.255          0.457         0.306         0.331     20             6.154          0.859
+    6  6       0.189             64.972          0.530         0.317         0.314     20             6.154          0.582
+    6  7       0.193             63.449          0.539         0.346         0.411     15             4.963          0.754
+    6  8       0.194             61.670          0.521         0.377         0.416     17             5.348          0.717
+
+=== Per-cluster bootstrap Jaccard (clusters ordered by size; >0.75 stable, 0.6-0.75 indicative, <0.5 dissolves) ===
+ dims  k  min_cluster_jaccard                      jaccard_by_cluster
+    3  2                0.723                               0.79/0.72
+    3  3                0.727                          0.82/0.86/0.73
+    3  4                0.681                     0.77/0.76/0.68/0.85
+    3  5                0.656                0.75/0.73/0.73/0.66/0.83
+    3  6                0.619           0.72/0.73/0.66/0.66/0.62/0.77
+    3  7                0.604      0.68/0.73/0.67/0.73/0.63/0.60/0.73
+    3  8                0.631 0.63/0.69/0.74/0.77/0.65/0.72/0.65/0.76
+    4  2                0.778                               0.86/0.78
+    4  3                0.652                          0.83/0.78/0.65
+    4  4                0.551                     0.71/0.77/0.55/0.80
+    4  5                0.652                0.77/0.82/0.73/0.65/0.83
+    4  6                0.529           0.83/0.65/0.53/0.55/0.53/0.68
+    4  7                0.505      0.79/0.64/0.64/0.64/0.51/0.50/0.62
+    4  8                0.516 0.76/0.68/0.71/0.72/0.52/0.57/0.58/0.70
+    6  2                0.748                               0.83/0.75
+    6  3                0.597                          0.83/0.76/0.60
+    6  4                0.503                     0.73/0.63/0.50/0.59
+    6  5                0.482                0.63/0.57/0.48/0.51/0.59
+    6  6                0.508           0.66/0.55/0.63/0.51/0.55/0.64
+    6  7                0.489      0.66/0.49/0.67/0.52/0.60/0.65/0.71
+    6  8                0.414 0.46/0.67/0.64/0.52/0.41/0.54/0.75/0.73
+
+=== Outcomes by cluster, information only (reading% / numeracy%), dims=6 ===
+ k    n_reading_by_cluster reading_strict_by_cluster numeracy_strict_by_cluster
+ 2                 199/133                     58/26                      36/19
+ 3              178/128/26                  61/27/30                   36/21/28
+ 4            126/86/89/31               67/31/36/22                40/17/30/22
+ 5         119/79/88/27/19            69/34/33/17/36              40/19/27/9/46
+ 6      100/76/62/48/27/19         59/34/65/27/17/36           31/18/49/25/9/46
+ 7    92/68/61/47/27/23/14      62/31/68/30/17/31/36        31/18/50/25/9/21/49
+ 8 64/69/58/46/32/24/23/16   32/63/68/48/20/19/31/39    15/26/52/36/25/10/21/50
+
+=== Most distinctive levels per cluster, dims=6 ===
+ k  cluster   n  weighted_pct                                                                                                                                                             top_levels  n_gaps_ge_15pp
+ 2        1 216          56.4                    wealth=lower_40 (-29pp); digital_resources=limited_or_none (-25pp); digital_resources=home_internet_and_own_device (+25pp); wealth=upper_40 (+24pp)               7
+ 2        2 152          43.6                    wealth=lower_40 (+38pp); digital_resources=home_internet_and_own_device (-32pp); digital_resources=limited_or_none (+32pp); wealth=upper_40 (-31pp)               8
+ 3        1 193          49.3                      wealth=lower_40 (-31pp); digital_resources=limited_or_none (-26pp); digital_resources=home_internet_and_own_device (+26pp); books=few_0_4 (-25pp)               8
+ 3        2 144          40.9                    wealth=lower_40 (+36pp); wealth=upper_40 (-30pp); digital_resources=home_internet_and_own_device (-28pp); digital_resources=limited_or_none (+28pp)               7
+ 3        3  31           9.8                                                   disability=no (-69pp); disability=yes (+69pp); emo_difficulty=rarely (-53pp); emo_difficulty=monthly_or_more (+53pp)              11
+ 4        1 137          35.1                                                                     wealth=upper_40 (+39pp); wealth=lower_40 (-39pp); books=many_10plus (+38pp); books=few_0_4 (-29pp)              10
+ 4        2  97          28.1                                                                      wealth=lower_40 (+46pp); wealth=upper_40 (-29pp); phys_punish=no (-23pp); phys_punish=yes (+23pp)              14
+ 4        3  98          26.1                                                                                     school_visit=yes (-36pp); school_visit=no (+36pp); pta=no (+27pp); pta=yes (-27pp)              12
+ 4        4  36          10.7                                                            disability=no (-66pp); disability=yes (+66pp); online_learning=daily (-43pp); emo_difficulty=rarely (-42pp)              13
+ 5        1 130          33.4                                                                     wealth=lower_40 (-40pp); wealth=upper_40 (+39pp); books=many_10plus (+39pp); books=few_0_4 (-30pp)              12
+ 5        2  89          26.0                                                                      wealth=lower_40 (+46pp); wealth=upper_40 (-29pp); phys_punish=no (-23pp); phys_punish=yes (+23pp)              12
+ 5        3  97          25.8                                                                          school_visit=yes (-34pp); school_visit=no (+34pp); books=many_10plus (-27pp); pta=yes (-25pp)              13
+ 5        4  32           8.6 online_learning=rarely_never (+78pp); online_learning=daily (-62pp); digital_resources=home_internet_and_own_device (-46pp); digital_resources=limited_or_none (+46pp)              18
+ 5        5  20           6.2                                                   emo_difficulty=rarely (-86pp); emo_difficulty=monthly_or_more (+86pp); disability=no (-63pp); disability=yes (+63pp)              12
+ 6        1 109          27.6                                                                   wealth=lower_40 (-34pp); mother_edu=post_sec (+31pp); books=few_0_4 (-27pp); wealth=upper_40 (+25pp)              15
+ 6        2  85          25.8                                                                      wealth=lower_40 (+45pp); wealth=upper_40 (-27pp); phys_punish=no (-23pp); phys_punish=yes (+23pp)              13
+ 6        3  68          17.4                                                                         psych_aggr=yes (-60pp); psych_aggr=no (+60pp); phys_punish=yes (-53pp); phys_punish=no (+53pp)              12
+ 6        4  54          14.4                                                                                     school_visit=yes (-51pp); school_visit=no (+51pp); pta=yes (-48pp); pta=no (+48pp)              14
+ 6        5  32           8.6 online_learning=rarely_never (+78pp); online_learning=daily (-62pp); digital_resources=home_internet_and_own_device (-46pp); digital_resources=limited_or_none (+46pp)              18
+ 6        6  20           6.2                                                   emo_difficulty=rarely (-86pp); emo_difficulty=monthly_or_more (+86pp); disability=no (-63pp); disability=yes (+63pp)              12
+ 7        1  99          25.5                                                                   mother_edu=post_sec (+38pp); wealth=lower_40 (-35pp); wealth=upper_40 (+31pp); books=few_0_4 (-30pp)              13
+ 7        2  76          22.7                                                                      wealth=lower_40 (+40pp); books=many_10plus (-29pp); books=few_0_4 (+27pp); phys_punish=no (-26pp)              11
+ 7        3  67          17.1                                                                         psych_aggr=yes (-61pp); psych_aggr=no (+61pp); phys_punish=yes (-53pp); phys_punish=no (+53pp)              12
+ 7        4  52          13.9                                                                                     pta=yes (-48pp); pta=no (+48pp); school_visit=yes (-43pp); school_visit=no (+43pp)              14
+ 7        5  32           8.6 online_learning=rarely_never (+76pp); online_learning=daily (-60pp); digital_resources=home_internet_and_own_device (-45pp); digital_resources=limited_or_none (+45pp)              18
+ 7        6  27           7.3                                                                        econ_work=no (-90pp); econ_work=yes (+90pp); wealth=lower_40 (+38pp); books=many_10plus (+25pp)              10
+ 7        7  15           5.0                                                   emo_difficulty=monthly_or_more (+89pp); emo_difficulty=rarely (-89pp); disability=no (-77pp); disability=yes (+77pp)              13
+ 8        1  70          21.2                                                                     wealth=lower_40 (+41pp); books=many_10plus (-28pp); books=few_0_4 (+27pp); wealth=upper_40 (-26pp)              11
+ 8        2  74          19.3                                                               wealth=upper_40 (+51pp); books=many_10plus (+38pp); wealth=lower_40 (-36pp); mother_edu=post_sec (+33pp)              16
+ 8        3  64          16.6                                                                         psych_aggr=yes (-63pp); psych_aggr=no (+63pp); phys_punish=yes (-52pp); phys_punish=no (+52pp)              12
+ 8        4  51          12.7                                                                            wealth=middle (+68pp); wealth=lower_40 (-40pp); wealth=upper_40 (-29pp); area=rural (+26pp)               9
+ 8        5  37           9.9                                                                                     school_visit=yes (-63pp); school_visit=no (+63pp); pta=yes (-48pp); pta=no (+48pp)              17
+ 8        6  28           7.7                     online_learning=rarely_never (+79pp); online_learning=daily (-63pp); books=few_0_4 (+49pp); digital_resources=home_internet_and_own_device (-42pp)              18
+ 8        7  27           7.3                                                                        econ_work=no (-90pp); econ_work=yes (+90pp); wealth=lower_40 (+38pp); books=many_10plus (+25pp)              10
+ 8        8  17           5.3                                                   emo_difficulty=rarely (-89pp); emo_difficulty=monthly_or_more (+89pp); disability=no (-71pp); disability=yes (+71pp)              11
+
+Saved k_comparison.csv, k_top_levels.csv and console_log.txt to /Users/sreshthtiwari/Desktop/jamaica_research/outputs/06_k_comparison

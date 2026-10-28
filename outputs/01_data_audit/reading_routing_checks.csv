@@ -1,0 +1,18 @@
+check,group,column,n
+FL14 practice read correctly vs has word count (FL20A),(blank),False,27
+FL14 practice read correctly vs has word count (FL20A),(blank),True,6
+FL14 practice read correctly vs has word count (FL20A),NO,False,93
+FL14 practice read correctly vs has word count (FL20A),NO,True,0
+FL14 practice read correctly vs has word count (FL20A),NO RESPONSE,False,3
+FL14 practice read correctly vs has word count (FL20A),NO RESPONSE,True,0
+FL14 practice read correctly vs has word count (FL20A),YES,False,7
+FL14 practice read correctly vs has word count (FL20A),YES,True,232
+has word count vs has comprehension answers (FL21BA),False,False,130
+has word count vs has comprehension answers (FL21BA),False,True,0
+has word count vs has comprehension answers (FL21BA),True,False,43
+has word count vs has comprehension answers (FL21BA),True,True,195
+language of instruction (FL9),READING TEST AVAILABLE: ENGLISH,,343
+language of instruction (FL9),READING TEST NOT AVAILABLE: PATOIS,,20
+language of instruction (FL9),NO RESPONSE,,3
+language of instruction (FL9),DK,,1
+language of instruction (FL9),OTHER,,1

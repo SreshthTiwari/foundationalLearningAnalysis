@@ -1,0 +1,156 @@
+=== Eligibility variable labels ===
+CB7: Attended school or early childhood programme during current school year
+  {1.0: 'YES', 2.0: 'NO', 9.0: 'NO RESPONSE'}
+CB8A: Level of education attended current school year
+  {0.0: 'ECE', 1.0: 'PRIMARY', 2.0: 'LOWER SECONDARY', 3.0: 'UPPER SECONDARY', 4.0: 'HIGHER', 5.0: 'SPECIAL EDUCATION', 9.0: 'NO RESPONSE'}
+CB8B: Grade attended at that level attended current school year
+  {1.0: 'GRADE 1', 2.0: 'GRADE 2', 3.0: 'GRADE 3', 4.0: 'GRADE 4', 5.0: 'GRADE 5', 6.0: 'GRADE 6', 7.0: 'GRADE 7', 8.0: 'GRADE 8', 99.0: 'NO RESPONSE'}
+FL28: Result of interview with child
+  {1.0: 'COMPLETED', 2.0: 'NOT AT HOME', 3.0: 'MOTHER / CARETAKER REFUSED', 4.0: 'CHILD REFUSED', 5.0: 'PARTLY COMPLETED', 6.0: 'INCAPACITATED', 96.0: 'OTHER'}
+
+=== Sample flow ===
+                              step    n  pct_of_stageA
+       All children 5-17 in fs.sav 2725            NaN
+Attending school this year (CB7=1) 2531            NaN
+     ... at primary level (CB8A=1) 1197            NaN
+  Stage A: Grade 2-3 (CB8B in 2,3)  394          100.0
+         Stage B: FL28 = completed  368           93.4
+
+Grade 2-3 by FL28 result:
+FL28
+COMPLETED                     368
+MOTHER / CARETAKER REFUSED      9
+NOT AT HOME                     7
+NaN                             6
+CHILD REFUSED                   3
+OTHER                           1
+
+Grade 2-3 by grade:
+CB8B
+GRADE 3    201
+GRADE 2    193
+
+Completed-assessment children with usable reading items:
+  FL20A: 238 non-missing, 0 coded no-response
+  FL20B: 238 non-missing, 2 coded no-response
+  FL21BA: 195 non-missing, 0 coded no-response
+  FL21BE: 195 non-missing, 1 coded no-response
+Completed-assessment children with usable numeracy items:
+  FL23A: 368 non-missing
+  FL24A: 355 non-missing
+  FL25A: 355 non-missing
+  FL27A: 346 non-missing
+
+=== Reading routing (completed assessments) ===
+FL14 practice read correctly vs has word count (FL20A):
+has FL20A    False  True 
+FL14                     
+(blank)         27      6
+NO              93      0
+NO RESPONSE      3      0
+YES              7    232
+Has word count vs has comprehension answers (FL21BA):
+has FL21BA  False  True 
+has FL20A               
+False         130      0
+True           43    195
+Language of instruction (FL9):
+FL9
+READING TEST AVAILABLE: ENGLISH       343
+READING TEST NOT AVAILABLE: PATOIS     20
+NO RESPONSE                             3
+DK                                      1
+OTHER                                   1
+Missed words (FL20B) among those with comprehension answers vs not:
+        count  mean   std  min  25%   50%   75%   max
+FL21BA                                               
+False    43.0  11.2  10.8  0.0  4.5  10.0  13.0  52.0
+True    195.0   0.8   1.6  0.0  0.0   0.0   1.0   7.0
+
+Assessed vs not (Grade 2-3), unweighted:
+-- Sex
+assessed  False  True 
+HL4                   
+FEMALE    0.462  0.549
+MALE      0.538  0.451
+-- Wealth index quintile
+assessed  False  True 
+windex5               
+Fourth    0.192  0.177
+Middle    0.308  0.212
+Poorest   0.192  0.209
+Richest   0.192  0.198
+Second    0.115  0.204
+-- Area
+assessed                                   False  True 
+HH6                                                    
+Greater Kingston Metropolitan Area (GKMA)  0.346  0.269
+Other Urban Centers (OUC)                  0.154  0.242
+Rural                                      0.500  0.489
+
+=== Survey design variables (Grade 2-3 sample) ===
+fsweight: label="Children 5-17's sample weight", missing=0, n_unique=311, min=0.27927759735093194, max=6.9434529973872605
+fshweight: label="Children 5-17's household sample weight", missing=0, n_unique=229, min=0.27061648629633045, max=4.411764118334319
+PSU: label='Primary sampling unit', missing=0, n_unique=243, min=3.0, max=390.0
+stratum: label='Stratum', missing=0, n_unique=27, min=1.0, max=28.0
+Correlation fsweight vs fshweight: 0.639
+PSUs: 243 | strata: 27 | min PSUs per stratum: 1
+
+=== Candidate variable audit (Stage A sample) ===
+                            domain     variable  n_valid  pct_sysmissing  pct_special_code  n_categories
+         socioeconomic/demographic      windex5    394.0             0.0               0.0           5.0
+         socioeconomic/demographic       wscore    394.0             0.0               0.0         394.0
+         socioeconomic/demographic      melevel    393.0             0.0               0.3           5.0
+         socioeconomic/demographic          HH6    394.0             0.0               0.0           3.0
+         socioeconomic/demographic          HH7    394.0             0.0               0.0          14.0
+         socioeconomic/demographic          HL4    394.0             0.0               0.0           2.0
+         socioeconomic/demographic        FSAGE    394.0             0.0               0.0           3.0
+home learning/parental involvement          PR3    387.0             1.5               0.3          11.0
+home learning/parental involvement          PR5    388.0             1.5               0.0           2.0
+home learning/parental involvement          PR6    380.0             3.6               0.0           2.0
+home learning/parental involvement          PR8    380.0             3.6               0.0           2.0
+home learning/parental involvement         PR10    385.0             1.5               0.8           2.0
+home learning/parental involvement        PR11B    388.0             1.5               0.0           2.0
+             functioning/wellbeing fsdisability    394.0             0.0               0.0           2.0
+             functioning/wellbeing        FCF19    394.0             0.0               0.0           3.0
+             functioning/wellbeing        FCF20    394.0             0.0               0.0           3.0
+             functioning/wellbeing        FCF21    394.0             0.0               0.0           3.0
+             functioning/wellbeing        FCF24    394.0             0.0               0.0           2.0
+             functioning/wellbeing        FCF25    393.0             0.0               0.3           5.0
+             functioning/wellbeing        FCF26    393.0             0.0               0.3           5.0
+                        discipline        FCD2C    393.0             0.3               0.0           2.0
+                        discipline        FCD2D    393.0             0.3               0.0           2.0
+                        discipline        FCD2F    393.0             0.3               0.0           2.0
+                        discipline        FCD2G    393.0             0.3               0.0           2.0
+                        discipline        FCD2H    393.0             0.3               0.0           2.0
+                        discipline        FCD2I    393.0             0.3               0.0           2.0
+                        discipline        FCD2J    393.0             0.3               0.0           2.0
+                    digital access        CB10D    394.0             0.0               0.0           4.0
+                    digital access       CB10EA    375.0             4.8               0.0           2.0
+                    digital access       CB10EB    374.0             4.8               0.3           2.0
+                    digital access       CB10EC    375.0             4.8               0.0           2.0
+                    digital access       CB10ED    375.0             4.8               0.0           2.0
+                    digital access       CB10EE    374.0             4.8               0.3           2.0
+                    digital access        CB10F    375.0             4.8               0.0           2.0
+                      child labour         CL1A    394.0             0.0               0.0           2.0
+                      child labour         CL1B    394.0             0.0               0.0           2.0
+                      child labour         CL1C    394.0             0.0               0.0           2.0
+                      child labour         CL1X    394.0             0.0               0.0           2.0
+                      child labour          CL3     41.0            89.6               0.0           7.0
+                      child labour          CL4     41.0            89.6               0.0           2.0
+                      child labour          CL5     41.0            89.6               0.0           1.0
+                      child labour          CL7    394.0             0.0               0.0           2.0
+                      child labour          CL9    394.0             0.0               0.0           2.0
+                      child labour        CL11A    394.0             0.0               0.0           2.0
+                      child labour        CL11B    394.0             0.0               0.0           2.0
+                      child labour        CL11C    394.0             0.0               0.0           2.0
+                      child labour        CL11D    394.0             0.0               0.0           2.0
+                      child labour        CL11E    393.0             0.0               0.3           2.0
+                      child labour        CL11F    394.0             0.0               0.0           2.0
+                      child labour         CL13    202.0            48.7               0.0          16.0
+                             other         CB11    392.0             0.0               0.5           2.0
+                             other  fsinsurance    392.0             0.0               0.5           2.0
+                             other         PR12      NaN             NaN               NaN           NaN
+                             other         PR13    386.0             1.5               0.5           2.0
+
+Saved tables and console_log.txt to /Users/sreshthtiwari/Desktop/jamaica_research/outputs/01_data_audit

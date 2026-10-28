@@ -8,9 +8,11 @@ Small-sample choices (n=368, smallest cluster ~31): shallow trees, no SMOTE/grid
 class-balanced weights, repeated stratified 5-fold CV, and SHAP computed OUT-OF-FOLD (each
 child is explained by a model that never saw them). SHAP explains the classifier, not causes.
 
-Everything is written to outputs/explainable/ (existing outputs are untouched).
+Everything is written to outputs/07_explainable_ml/ (other steps' outputs are untouched):
+tables, fig1-fig4, run_summary.json, cluster_descriptions.csv, console_log.txt. report.md is
+the hand-written write-up of these results.
 """
-from pathlib import Path
+import json
 
 import matplotlib
 
@@ -26,21 +28,23 @@ from sklearn.metrics import (accuracy_score, balanced_accuracy_score, confusion_
 from sklearn.model_selection import RepeatedStratifiedKFold, StratifiedKFold
 from sklearn.utils.class_weight import compute_sample_weight
 
+import config
+
+OUT = config.ensure(config.OUT_EXPLAINABLE)
+config.log_console(OUT)
+
 try:
     from xgboost import XGBClassifier
 except Exception as e:  # libomp missing
     XGBClassifier = None
     print("xgboost unavailable:", type(e).__name__)
 
-ROOT = Path(__file__).parent
-OUT = ROOT / "outputs" / "explainable"
-OUT.mkdir(parents=True, exist_ok=True)
-SEED, REPEATS = 42, 3
+SEED, REPEATS = config.SEED, config.CV_REPEATS
 
 # ------------------------------------------------------------------ data (no outcomes)
-d = pd.read_csv(ROOT / "outputs" / "analytic.csv")
-d["cluster"] = pd.read_csv(ROOT / "outputs" / "clusters.csv")["cluster"]
-feats = [c for c in d.columns if c.startswith("f_")]
+d = pd.read_csv(config.ANALYTIC_CSV)
+d["cluster"] = pd.read_csv(config.CLUSTERS_CSV)["cluster"]
+feats = [c for c in d.columns if c.startswith(config.FEATURE_PREFIX)]
 w = d["weight"].to_numpy()
 X = d[feats].copy()
 for c in feats:  # same mode-fill as step 3, so the labels and the classifier see the same data
@@ -53,14 +57,7 @@ K = int(y.max() + 1)
 sizes = np.bincount(y)
 print(f"n={len(y)}, clusters={K}, sizes={sizes.tolist()}, majority-class baseline={sizes.max()/len(y):.3f}")
 
-DOMAINS = {
-    "Socioeconomic": ["wealth", "mother_edu", "area"],
-    "Home learning & school contact": ["books", "hw_help", "pta", "school_visit"],
-    "Child functioning": ["disability", "emo_difficulty"],
-    "Discipline/protection": ["psych_aggr", "phys_punish"],
-    "Digital access": ["online_learning", "digital_resources"],
-    "Child work": ["econ_work"],
-}
+DOMAINS = config.DOMAINS
 dom_of = {v: dname for dname, vs in DOMAINS.items() for v in vs}
 SES = DOMAINS["Socioeconomic"]
 
@@ -86,9 +83,9 @@ def fit(name, Xtr, ytr):
 def cv_predict(name, Xmat, repeats=REPEATS):
     """Out-of-fold predictions for each repeat of stratified 5-fold CV. Returns (repeats, n)."""
     preds = np.zeros((repeats, len(y)), dtype=int)
-    rskf = RepeatedStratifiedKFold(n_splits=5, n_repeats=repeats, random_state=SEED)
+    rskf = RepeatedStratifiedKFold(n_splits=config.CV_FOLDS, n_repeats=repeats, random_state=SEED)
     for i, (tr, te) in enumerate(rskf.split(Xmat, y)):
-        preds[i // 5, te] = fit(name, Xmat.iloc[tr], y[tr]).predict(Xmat.iloc[te])
+        preds[i // config.CV_FOLDS, te] = fit(name, Xmat.iloc[tr], y[tr]).predict(Xmat.iloc[te])
     return preds
 
 
@@ -169,7 +166,8 @@ for f in feats:
 cram = pd.DataFrame(cv_rows).sort_values("cramers_v", ascending=False).round(3)
 cram.to_csv(OUT / "cramers_v.csv", index=False)
 print("\nCramér's V, cluster vs each variable (unweighted):\n", cram.to_string(index=False))
-print("NMI(cluster, wealth) =", round(normalized_mutual_info_score(d["cluster"], X["f_wealth"]), 3))
+nmi_wealth = round(normalized_mutual_info_score(d["cluster"], X["f_wealth"]), 3)
+print("NMI(cluster, wealth) =", nmi_wealth)
 
 # ------------------------------------------------------------------ SHAP (out-of-fold)
 def shap_arr(model, Xte):
@@ -178,7 +176,7 @@ def shap_arr(model, Xte):
 
 
 sv_oof = np.zeros((len(y), Xd.shape[1], K))
-for tr, te in StratifiedKFold(5, shuffle=True, random_state=SEED).split(Xd, y):
+for tr, te in StratifiedKFold(config.CV_FOLDS, shuffle=True, random_state=SEED).split(Xd, y):
     sv_oof[te] = shap_arr(fit(best, Xd.iloc[tr], y[tr]), Xd.iloc[te])
 sv_full = shap_arr(fit(best, Xd, y), Xd)  # in-sample, for a stability comparison only
 
@@ -223,6 +221,7 @@ lvl.to_csv(OUT / "shap_level_by_cluster.csv", index=False)
 # ------------------------------------------------------------------ cluster descriptions
 print("\n=== Cluster descriptions (weighted %, gap vs overall in percentage points) ===")
 wshare = [w[y == c].sum() / w.sum() * 100 for c in range(K)]
+desc_rows = []
 for c in range(K):
     sub = lvl[lvl.cluster == c + 1]
     top_shap = glob.sort_values(f"cluster_{c+1}", ascending=False).head(4)["variable"].tolist()
@@ -230,6 +229,16 @@ for c in range(K):
     print(f"\nCluster {c+1}: n={sizes[c]} ({wshare[c]:.1f}% weighted). Top SHAP variables: {', '.join(top_shap)}")
     for _, r in top_gap.iterrows():
         print(f"   {r.level:42s} cluster {r.cluster_pct:5.1f}%  overall {r.overall_pct:5.1f}%  ({r.gap_pp:+.0f}pp)")
+        desc_rows.append(dict(cluster=c + 1, n=int(sizes[c]), weighted_share_pct=round(wshare[c], 1),
+                              top_shap_variables="; ".join(top_shap), level=r.level, cluster_pct=r.cluster_pct,
+                              overall_pct=r.overall_pct, gap_pp=r.gap_pp))
+pd.DataFrame(desc_rows).to_csv(OUT / "cluster_descriptions.csv", index=False)
+with open(OUT / "run_summary.json", "w") as fh:
+    json.dump(dict(n=len(y), n_clusters=K, cluster_sizes=sizes.tolist(),
+                   majority_class_baseline=round(sizes.max() / len(y), 3), models=names, primary_model=best,
+                   shap_rank_agreement_oof_vs_insample=round(float(rho), 3),
+                   nmi_cluster_wealth=float(nmi_wealth), cv_repeats=REPEATS, cv_folds=config.CV_FOLDS,
+                   seed=SEED), fh, indent=2)
 
 # ------------------------------------------------------------------ figures
 plt.rcParams.update({"font.size": 9})

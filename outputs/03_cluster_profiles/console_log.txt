@@ -1,0 +1,73 @@
+mode-filling 2 missing in f_mother_edu -> upper_sec
+mode-filling 1 missing in f_books -> many_10plus
+mode-filling 8 missing in f_pta -> yes
+mode-filling 1 missing in f_emo_difficulty -> rarely
+
+MCA eigenvalues (first 8): [0.179 0.116 0.106 0.091 0.085 0.083 0.079 0.073]  | keep 6 (eigenvalue > 1/14)
+
+=== Cluster diagnostics ===
+  k     wss  silhouette  boot_ari_mean  boot_ari_p10  min_cluster_share  min_weighted_share  wss_drop_pct
+ 2 308.407       0.187          0.580         0.211              0.413               0.436           NaN
+ 3 265.697       0.187          0.698         0.440              0.084               0.098          13.8
+ 4 236.372       0.176          0.546         0.358              0.079               0.090          11.0
+ 5 213.692       0.175          0.500         0.344              0.073               0.085           9.6
+ 6 192.939       0.188          0.539         0.320              0.043               0.051           9.7
+
+Chosen k = 3  (auto; override with --k)
+
+=== Cluster sizes ===
+            n  weighted_share_pct
+cluster                         
+1        193                49.3
+2        144                40.9
+3         31                 9.8
+
+=== Weighted level shares (%) by cluster ===
+           variable                        level  overall  cluster_1  cluster_2  cluster_3
+           f_wealth                     lower_40     44.7       13.9       81.0       48.2
+           f_wealth                       middle     19.9       26.5       13.3       14.0
+           f_wealth                     upper_40     35.5       59.6        5.8       37.9
+       f_mother_edu            lower_sec_or_less     18.6        8.6       27.7       30.9
+       f_mother_edu                     post_sec     32.3       47.8       14.7       27.2
+       f_mother_edu                    upper_sec     49.1       43.6       57.6       41.9
+             f_area                         GKMA     28.7       33.7       20.8       37.0
+             f_area                  other_urban     20.1       21.4       18.8       19.0
+             f_area                        rural     51.2       44.9       60.5       44.0
+            f_books                      few_0_4     41.2       16.2       67.8       55.8
+            f_books                  many_10plus     42.9       64.3       20.4       29.2
+            f_books                     some_5_9     15.9       19.5       11.8       15.0
+          f_hw_help                           no      4.7        0.7        6.8       16.2
+          f_hw_help                  no_homework      2.3        1.5        0.5       13.5
+          f_hw_help                          yes     93.1       97.8       92.7       70.3
+              f_pta                           no     20.0        9.3       28.1       40.6
+              f_pta                          yes     80.0       90.7       71.9       59.4
+     f_school_visit                           no     21.6       16.6       27.3       23.4
+     f_school_visit                          yes     78.4       83.4       72.7       76.6
+       f_disability                           no     91.4      100.0       97.7       22.4
+       f_disability                          yes      8.6        0.0        2.3       77.6
+   f_emo_difficulty              monthly_or_more     11.2        9.1        1.0       64.1
+   f_emo_difficulty                       rarely     88.8       90.9       99.0       35.9
+       f_psych_aggr                           no     24.5       32.9       18.1        9.3
+       f_psych_aggr                          yes     75.5       67.1       81.9       90.7
+      f_phys_punish                           no     39.0       51.2       26.0       31.9
+      f_phys_punish                          yes     61.0       48.8       74.0       68.1
+  f_online_learning                        daily     74.5       94.1       60.6       33.2
+  f_online_learning                 rarely_never      7.6        0.0        8.9       40.9
+  f_online_learning                       weekly     17.9        5.9       30.5       25.9
+f_digital_resources home_internet_and_own_device     70.3       96.0       41.9       59.2
+f_digital_resources              limited_or_none     29.7        4.0       58.1       40.8
+        f_econ_work                           no     89.9       95.2       81.9       97.0
+        f_econ_work                          yes     10.1        4.8       18.1        3.0
+
+Descriptive (not used in clustering), weighted % by cluster:
+cluster     1     2     3
+d_sex                    
+FEMALE   64.8  54.8  42.1
+MALE     35.2  45.2  57.9 
+
+cluster     1     2     3
+d_grade                  
+2        49.7  40.0  51.3
+3        50.3  60.0  48.7 
+
+Saved tables and console_log.txt in /Users/sreshthtiwari/Desktop/jamaica_research/outputs/03_cluster_profiles

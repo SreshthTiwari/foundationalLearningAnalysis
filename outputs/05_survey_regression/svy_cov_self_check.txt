@@ -1,0 +1,1 @@
+svy_cov self-check vs statsmodels HC0 (rtol=1e-6): passed

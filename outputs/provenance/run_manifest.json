@@ -1,0 +1,375 @@
+{
+  "started_utc": "2026-10-28T16:58:20+00:00",
+  "finished_utc": "2026-10-28T16:58:56+00:00",
+  "command": "python run_full_pipeline.py",
+  "python": {
+    "version": "3.13.14",
+    "implementation": "CPython",
+    "executable": "/Users/sreshthtiwari/Desktop/jamaica_research/.venv/bin/python"
+  },
+  "platform": {
+    "system": "Darwin",
+    "release": "25.5.0",
+    "machine": "arm64"
+  },
+  "git": {
+    "commit": "5e2610662eae8b5895b90fa7cdbdb9cfff0909af",
+    "branch": "main",
+    "uncommitted_changes": true
+  },
+  "settings": {
+    "ROOT": ".",
+    "DATA_DIR": "data",
+    "DOCS_DIR": "docs",
+    "FS_SAV": "data/fs.sav",
+    "OUTPUT_ROOT": "outputs",
+    "OUT_DATA_AUDIT": "outputs/01_data_audit",
+    "OUT_ANALYTIC": "outputs/02_analytic_dataset",
+    "OUT_PROFILES": "outputs/03_cluster_profiles",
+    "OUT_OUTCOMES": "outputs/04_outcomes_by_cluster",
+    "OUT_PRELIM_SHAP": "outputs/04_outcomes_by_cluster/shap_preliminary",
+    "OUT_REGRESSION": "outputs/05_survey_regression",
+    "OUT_K_COMPARE": "outputs/06_k_comparison",
+    "OUT_EXPLAINABLE": "outputs/07_explainable_ml",
+    "OUT_PROVENANCE": "outputs/provenance",
+    "ANALYTIC_CSV": "outputs/02_analytic_dataset/analytic.csv",
+    "CLUSTERS_CSV": "outputs/03_cluster_profiles/clusters.csv",
+    "SEED": 42,
+    "SELF_CHECK_SEED": 0,
+    "STABILITY_SEED_START": 100,
+    "ATTENDING": 1,
+    "PRIMARY": 1,
+    "GRADES": [
+      2,
+      3
+    ],
+    "COMPLETED": 1,
+    "N_WORDS": 72,
+    "MIN_WORD_SHARE": 0.9,
+    "OUTCOMES_ALL": [
+      "reading_strict",
+      "numeracy_strict",
+      "reading_lenient",
+      "numeracy_lenient",
+      "reading_strict_incl"
+    ],
+    "OUTCOMES_PRIMARY": [
+      "reading_strict",
+      "numeracy_strict"
+    ],
+    "FEATURE_PREFIX": "f_",
+    "MCA_COMPONENTS": 10,
+    "MCA_N_ITER": 10,
+    "MCA_KEEP_MIN": 2,
+    "MCA_KEEP_MAX": 6,
+    "KS_PROFILES": [
+      2,
+      3,
+      4,
+      5,
+      6
+    ],
+    "BOOT_PROFILES": 100,
+    "AUTO_K_MIN": 3,
+    "AUTO_K_MIN_CLUSTER_SHARE": 0.08,
+    "AUTO_K_FALLBACK": 3,
+    "KS_COMPARE": [
+      2,
+      3,
+      4,
+      5,
+      6,
+      7,
+      8
+    ],
+    "BOOT_COMPARE": 200,
+    "DIMS_COMPARE": [
+      3,
+      4,
+      6
+    ],
+    "CV_REPEATS": 3,
+    "CV_FOLDS": 5,
+    "DOMAINS": {
+      "Socioeconomic": [
+        "wealth",
+        "mother_edu",
+        "area"
+      ],
+      "Home learning & school contact": [
+        "books",
+        "hw_help",
+        "pta",
+        "school_visit"
+      ],
+      "Child functioning": [
+        "disability",
+        "emo_difficulty"
+      ],
+      "Discipline/protection": [
+        "psych_aggr",
+        "phys_punish"
+      ],
+      "Digital access": [
+        "online_learning",
+        "digital_resources"
+      ],
+      "Child work": [
+        "econ_work"
+      ]
+    },
+    "CANDIDATES": {
+      "socioeconomic/demographic": [
+        "windex5",
+        "wscore",
+        "melevel",
+        "HH6",
+        "HH7",
+        "HL4",
+        "FSAGE"
+      ],
+      "home learning/parental involvement": [
+        "PR3",
+        "PR5",
+        "PR6",
+        "PR8",
+        "PR10",
+        "PR11B"
+      ],
+      "functioning/wellbeing": [
+        "fsdisability",
+        "FCF19",
+        "FCF20",
+        "FCF21",
+        "FCF24",
+        "FCF25",
+        "FCF26"
+      ],
+      "discipline": [
+        "FCD2C",
+        "FCD2D",
+        "FCD2F",
+        "FCD2G",
+        "FCD2H",
+        "FCD2I",
+        "FCD2J"
+      ],
+      "digital access": [
+        "CB10D",
+        "CB10EA",
+        "CB10EB",
+        "CB10EC",
+        "CB10ED",
+        "CB10EE",
+        "CB10F"
+      ],
+      "child labour": [
+        "CL1A",
+        "CL1B",
+        "CL1C",
+        "CL1X",
+        "CL3",
+        "CL4",
+        "CL5",
+        "CL7",
+        "CL9",
+        "CL11A",
+        "CL11B",
+        "CL11C",
+        "CL11D",
+        "CL11E",
+        "CL11F",
+        "CL13"
+      ],
+      "other": [
+        "CB11",
+        "fsinsurance",
+        "PR12",
+        "PR13"
+      ]
+    },
+    "SPECIAL": [
+      "NO RESPONSE",
+      "DK",
+      "DON'T KNOW",
+      "MISSING",
+      "REFUSED",
+      "NOT STATED"
+    ]
+  },
+  "cli_args": {
+    "k": null
+  },
+  "input_data": {
+    "data/fs.sav": {
+      "sha256": "75c40b1805d0f363c0f0954dbca422bb23a29cab92a5113694dd820507f76533",
+      "bytes": 1261812
+    }
+  },
+  "code_sha256": {
+    "run_full_pipeline.py": "d4570e9cce71ee7d68fa01ca8d5d5acf45086947ddf4c86459f150e4f83e9490",
+    "scripts/01_data_audit.py": "dd1301d373965d8f9522a2cbc6775692af4241c6b8a1a181ec938916b75ae8a3",
+    "scripts/02_build_dataset.py": "c1ad4274c99588084d1d11843401de6d4e5bc72ba8313bea3f054e5549629148",
+    "scripts/03_profiles.py": "b7c021364c37bd65e1badc6b3f43458308120422a4b00ff7bed0d04fad0f55bb",
+    "scripts/04_explain_and_outcomes.py": "b4e385573ee81bc04c065f0d10cc8fc3f08eeef8a02fe5c5bc4168eb55332ba6",
+    "scripts/05_survey_inference.py": "aebd0f5bc99065c46e4c5cb725315e7e58c3df641cb53340f93181eb57e0ba7d",
+    "scripts/06_compare_k.py": "7dde54432d786ad01c953b91427d35a5185aad3eaf6eb5416103f2ac3c6fa17d",
+    "scripts/07_explainable_ml.py": "587fde13bd2955af4f965fe70730cb73da84c7f70fa739da2d14e115e280cd98",
+    "scripts/config.py": "c74469f6e50763a9186549453aa135b1e76df7d8d891b6133a7484c8c020c113"
+  },
+  "steps": [
+    {
+      "script": "01_data_audit.py",
+      "args": [],
+      "return_code": 0,
+      "seconds": 0.4
+    },
+    {
+      "script": "02_build_dataset.py",
+      "args": [],
+      "return_code": 0,
+      "seconds": 0.3
+    },
+    {
+      "script": "03_profiles.py",
+      "args": [],
+      "return_code": 0,
+      "seconds": 5.2
+    },
+    {
+      "script": "04_explain_and_outcomes.py",
+      "args": [],
+      "return_code": 0,
+      "seconds": 2.8
+    },
+    {
+      "script": "05_survey_inference.py",
+      "args": [],
+      "return_code": 0,
+      "seconds": 1.0
+    },
+    {
+      "script": "06_compare_k.py",
+      "args": [],
+      "return_code": 0,
+      "seconds": 20.0
+    },
+    {
+      "script": "07_explainable_ml.py",
+      "args": [],
+      "return_code": 0,
+      "seconds": 6.9
+    }
+  ],
+  "installed_packages": {
+    "Jinja2": "3.1.6",
+    "MarkupSafe": "3.0.4",
+    "altair": "6.3.0",
+    "attrs": "26.1.0",
+    "cloudpickle": "3.1.2",
+    "contourpy": "1.4.0",
+    "cycler": "0.12.1",
+    "fonttools": "4.68.0",
+    "formulaic": "1.2.2",
+    "interface_meta": "2.0.1",
+    "joblib": "1.6.0",
+    "jsonschema": "4.26.0",
+    "jsonschema-specifications": "2025.9.1",
+    "kiwisolver": "1.5.1",
+    "matplotlib": "3.11.2",
+    "narwhals": "2.28.0",
+    "numpy": "2.5.4",
+    "packaging": "26.3",
+    "pandas": "3.1.0",
+    "patsy": "1.0.3",
+    "pillow": "13.0.0",
+    "pip": "26.1.2",
+    "prince": "0.23.0",
+    "pyarrow": "26.0.0",
+    "pyparsing": "3.3.3",
+    "pyreadstat": "1.3.7",
+    "python-dateutil": "3.0.0",
+    "referencing": "0.37.0",
+    "rpds-py": "2026.9.1",
+    "scikit-learn": "1.9.1",
+    "scipy": "1.18.1",
+    "shap": "0.54.1",
+    "six": "1.17.0",
+    "slicer": "0.0.8",
+    "statsmodels": "0.15.0",
+    "threadpoolctl": "3.7.0",
+    "tqdm": "4.70.1",
+    "typing_extensions": "4.16.0",
+    "tzdata": "2026.5",
+    "wrapt": "2.5.2rc1",
+    "xgboost": "3.4.1"
+  },
+  "output_sha256": {
+    "outputs/01_data_audit/assessed_vs_not.csv": "637e22add0d1189f40e3ebecc168600c1375047201d23fbb0eb84b4980d92d26",
+    "outputs/01_data_audit/console_log.txt": "11853898ab3b29459242703dd423fb942cd24b687266d1eff831132dd8f76ea3",
+    "outputs/01_data_audit/eligibility_value_labels.csv": "874b0ebbb8c71f2a5e4e0be1cc02e29b07ea701a6458ce62fbb76297d1cd7b5f",
+    "outputs/01_data_audit/fl28_result_counts.csv": "511684fd040daacd8bd08d5f9e0c99c8d2a1a9a469eb3d324fbd2d7de2642c23",
+    "outputs/01_data_audit/grade_counts.csv": "e391446da77c797b23d7791fd672b2b0241523928f6b64ad92d919f8a2b055b7",
+    "outputs/01_data_audit/missed_words_by_comprehension.csv": "3f46b74256f467c66a6a0d8d54fb9773f77b87b57a7f5cfaa281e156e9b269b3",
+    "outputs/01_data_audit/reading_routing_checks.csv": "b72d692dd89ed2a24a6a0bcdc05d6f52cbf39cf97e48595bb6a01ce73367c720",
+    "outputs/01_data_audit/sample_flow.csv": "490852c0c352b0a2fb513c7b6c6edc6f1d3e5e93f029201bda1783a4bd24bea7",
+    "outputs/01_data_audit/survey_design_summary.csv": "82ff714f03f12be6b402d788f95f51295645303f8ef8812c4e5430b55a413ae2",
+    "outputs/01_data_audit/survey_design_variables.csv": "1d557dcff800fa6f62c85789fde6b01156a70a1cbbeb7a6388f409082d15b742",
+    "outputs/01_data_audit/usable_item_counts.csv": "aad6dd526ec00b888e0cc9462c37da098de6774f9f6c5273331fbb7dd948668e",
+    "outputs/01_data_audit/variable_audit.csv": "a1d777279a7f385a8c894c2c2cbd4c789d7db3d817b6e0b43b9fb9e0d1af649e",
+    "outputs/02_analytic_dataset/analytic.csv": "6dd4efe4640904a86fa63bc72e47ef4f7888ef4ae2ef0d01b0fc28c213b8e732",
+    "outputs/02_analytic_dataset/console_log.txt": "050d20e89901f63d84e5063aababc0f6a200ec30574056f72c1a406ee6105685",
+    "outputs/02_analytic_dataset/digital_vs_online_learning.csv": "03d7fa50d6c042d850541aec88981ba7c70d556070a90be9d9c6e2e9b42423b6",
+    "outputs/02_analytic_dataset/feature_levels.csv": "e0a4bc35e28572d995e4a011c0986dd883cfc0e82c7ee5d91eb2ae058494d340",
+    "outputs/02_analytic_dataset/numeracy_task_pass_rates.csv": "795b1f605f7ae151f4e1177fde1fa4735d0cf798a0b88fca172ba99ab7d81541",
+    "outputs/02_analytic_dataset/outcome_rates.csv": "f19ccf798b87f68d964e8453b9e22bbbfe8d8a4a32e4320c91eef0fbaefef81e",
+    "outputs/02_analytic_dataset/reading_status_counts.csv": "125ab31918ce12fa59d3a52d53c50a15e55165cfb14186bf3ca72d3d93e1cee1",
+    "outputs/03_cluster_profiles/cluster_diagnostics.csv": "22a87ea9bb3456f4d06fa5fe25cd162c0a185e825f4f55fdaa395aadbe02a780",
+    "outputs/03_cluster_profiles/cluster_sizes.csv": "e851db755879360cd8b6ec3afb4429b87d357daa2628c69cf7947b0c68dc01f4",
+    "outputs/03_cluster_profiles/clustering_settings.json": "06d5c4f3c8dcd08db6db31975310ea9cfed6398e0f1abb8ec1289f2e12c0aaeb",
+    "outputs/03_cluster_profiles/clusters.csv": "ff9174faf60cc6fbad293a2a13fdbdc66a8a5ad25277e9a43b96d390296e0f9f",
+    "outputs/03_cluster_profiles/console_log.txt": "51b9e65facccb4508715e2b1a95dafe357940497f7a621a08afca7aae2805400",
+    "outputs/03_cluster_profiles/descriptive_by_cluster.csv": "f09c10c4052ec3b2cb1e8dbdf092c210fc41746f83c93e35a64d93aa6995c646",
+    "outputs/03_cluster_profiles/mca_eigenvalues.csv": "30fd60bb8829004305c5ca56068ca4cf9079effbb7dd51e5b186956ab93968a3",
+    "outputs/03_cluster_profiles/mode_filled_missing.csv": "29d84f3197f0ad0dd1dec6ab893158cba3c7ff6388606329b8c8410b3b146c9c",
+    "outputs/03_cluster_profiles/profiles_long.csv": "fe301ae601a604d6dfed5f8eecc9b4d5b9943d9dd20006f19c1e3811c3ebe92f",
+    "outputs/04_outcomes_by_cluster/classifier_accuracy.csv": "84173080ffa7d6739e8cafa07b2407d1e8bc34edbc15c5ef94dbb66183b77312",
+    "outputs/04_outcomes_by_cluster/console_log.txt": "51ddb0e2f1915fab0637a7fb85097582573a3b38617b6a82e1b7695c0ce20033",
+    "outputs/04_outcomes_by_cluster/design_summary.csv": "683e20c863daaaa9ed3afcfaf5a7bca0575763cc2ffd46752d8e0e58fab37b84",
+    "outputs/04_outcomes_by_cluster/proficiency_by_cluster.csv": "a93c8a562ae370d3aeac0a4b062aefcd007d28840a4ab86722f1180574ff700a",
+    "outputs/04_outcomes_by_cluster/proficiency_by_k.csv": "627245fa967a03095b0fa974f3e23147cdccc68689e8708b7336baa51e4fc04d",
+    "outputs/04_outcomes_by_cluster/shap_preliminary/shap_by_cluster.csv": "9b86e86ce5363f1d5223525a9238cd36a7b6eebf899ac6a7838565f4ad9753e4",
+    "outputs/04_outcomes_by_cluster/shap_preliminary/shap_cluster_1.png": "ad67919944a5d606a295b9914e2504b0c60d81704b6834c5bb6b374261730879",
+    "outputs/04_outcomes_by_cluster/shap_preliminary/shap_cluster_2.png": "0f0753d15d37a4018d0b84f0bd6c9cfb584482346868d47d8080555936c221c1",
+    "outputs/04_outcomes_by_cluster/shap_preliminary/shap_cluster_3.png": "f21ff6e0f7355f34ea617fc668d148c448fca560ef4691ffc20448d3e33d46ff",
+    "outputs/04_outcomes_by_cluster/shap_preliminary/shap_global.csv": "4fceef0a839b3fe4dd7526c67a1357466150ed2d3907335c4aab916af4f02065",
+    "outputs/05_survey_regression/cluster_or_m0_vs_m1.csv": "58794b4036384c20afa7f66df75efcef856f78f873f81b92c602ffd24be7453a",
+    "outputs/05_survey_regression/console_log.txt": "315b789372f5f9a98a742aa2e3dfc4620b5d379f56e3972a78ae9d4040359698",
+    "outputs/05_survey_regression/design_summary.csv": "51011c7f7dfda3a94dcc15632b1057c4f184aef4d86acc83d45e06a822fb0222",
+    "outputs/05_survey_regression/regression_odds_ratios.csv": "7673917555dbf1e75e6035403d242c271bb816c74a5a15c2e73758dceb1c0b36",
+    "outputs/05_survey_regression/svy_cov_self_check.txt": "8b9d4351269e4e9add52c3c31c3349c983d4fe3b61514cb999567097e3d8b680",
+    "outputs/05_survey_regression/wald_tests.csv": "72d02532370d1cb8ed9842c751b283cfa428fc25c2987feb87e2e713948b84d5",
+    "outputs/06_k_comparison/console_log.txt": "268e1d56b3b9d43cb1f2079c065be27ab7996c79514c32656cfcb2c16cbeb09e",
+    "outputs/06_k_comparison/k_comparison.csv": "79dc311b362ee9bec5aff4fbd5e4d414f70419054e9c5038fd13af2517324ef5",
+    "outputs/06_k_comparison/k_top_levels.csv": "b7d1e3f98a46fed296dc1ec6559e5f9ed5f6eb1e152446c12ba0d3cb0ccaf1f9",
+    "outputs/07_explainable_ml/ablation.csv": "600ae0dd99c905135994c174c0dadf51d9eedb33ed1f88376e5b89cea7a03d6c",
+    "outputs/07_explainable_ml/classifier_metrics.csv": "84664d45c16f51ebcf0ac474deb1539e7069cc26f0cb25fdb0ee99cf928dd8ec",
+    "outputs/07_explainable_ml/cluster_descriptions.csv": "1f496fbbb5115097f786b3d36f2b7d220bf33f18b71fe7a24399732c20dd7726",
+    "outputs/07_explainable_ml/confusion_matrix.csv": "bb02d8cb3fff0102918fe1a09e468d9cc3bae1af97e825a2d830e3ffb9386f74",
+    "outputs/07_explainable_ml/console_log.txt": "30c8e2fd1e4c73e789c932d45b789614069640336437946816d062938ecfe42d",
+    "outputs/07_explainable_ml/cramers_v.csv": "cdf69df959f9d6d86cf647095388ca10f0d8d6b5e0305204f4ae52244b9101b7",
+    "outputs/07_explainable_ml/domain_importance.csv": "c52e3902637a613af69af7a96bc6d46a5745a2fbe50b1cbb882de4c08456651b",
+    "outputs/07_explainable_ml/fig1_shap_global.png": "724e162ffebd50e9a8be9d4d35cb7de3b96ceb143ba8a83ee6fe7f8a77767be0",
+    "outputs/07_explainable_ml/fig2_shap_beeswarm_cluster1.png": "9536165aec32fbfe8ab79ebfe088ed584e2246682b59db9edb81088e7b4091fa",
+    "outputs/07_explainable_ml/fig2_shap_beeswarm_cluster2.png": "e9aa9851e56a3d0c7c8f7cef963e08ac450bbda4af9f7b381277c578154c9ce7",
+    "outputs/07_explainable_ml/fig2_shap_beeswarm_cluster3.png": "42b7f2b26f4ecdbf942ce3a23da7e817e4fe98bb00da839731b3f391e481fea7",
+    "outputs/07_explainable_ml/fig3_cluster_heatmap.png": "922bafa4c7111c8ff400304c2a284f76d9c729bec0071eb6bef98b2cf498aa98",
+    "outputs/07_explainable_ml/fig4_confusion_matrix.png": "ebbdffab9a91efaad7bbc65da0ef0b9275329fa4465acfaf63547f79e93c45e4",
+    "outputs/07_explainable_ml/per_class_metrics.csv": "8efd1dc2096549b65e4e3933f755d83427d306eeb971e33c2fb757d96836658e",
+    "outputs/07_explainable_ml/report.md": "8ffba3c34f2668511d07e9aaf9d41b676ea915095036e1e081ca2d237abd0d54",
+    "outputs/07_explainable_ml/run_summary.json": "b6a1d663ac82095be06a33dc21e70be1e1b53cb5dc6350cc502369c07da38bf0",
+    "outputs/07_explainable_ml/shap_level_by_cluster.csv": "f944f07a178a5f45d5c021d41e2f34ca600932cfffcd8a842876b9f7c36c98f5",
+    "outputs/07_explainable_ml/shap_variable_global.csv": "c738f2efec5cef6922e6c659f47d09366ae064ebdf5536441ce9c653cf67737c",
+    "outputs/results_summary.md": "5c83910e8769b6eb1b3df00adbce9639cc6bfb4c5f4fdb84a890b24433b8831f"
+  }
+}

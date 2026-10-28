@@ -1,0 +1,5 @@
+feature,n_missing,filled_with
+f_mother_edu,2,upper_sec
+f_books,1,many_10plus
+f_pta,8,yes
+f_emo_difficulty,1,rarely

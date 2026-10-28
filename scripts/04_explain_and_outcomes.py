@@ -1,12 +1,14 @@
 """Step 4: explain the profiles and compare foundational learning across them.
 
-Outputs (outputs/):
+Outputs (outputs/04_outcomes_by_cluster/):
   proficiency_by_cluster.csv   weighted rates + design-based 95% CIs (strict and lenient outcomes)
   proficiency_by_k.csv         strict-outcome rates by cluster for every k (robustness)
-  shap_*.csv / shap_*.png      cluster explanations (XGBoost if libomp is installed, else random forest)
+  design_summary.csv           PSUs, strata and design df used for the CIs
+  classifier_accuracy.csv      cross-validated accuracy of the cluster classifier
+  console_log.txt              everything this script printed
+  shap_preliminary/            shap_*.csv / shap_*.png cluster explanations (XGBoost if libomp is
+                               installed, else random forest)
 """
-from pathlib import Path
-
 import matplotlib
 
 matplotlib.use("Agg")
@@ -18,18 +20,22 @@ from scipy import stats
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.model_selection import StratifiedKFold, cross_val_predict
 
-OUT = Path(__file__).parent / "outputs"
-SEED = 42
-d = pd.read_csv(OUT / "analytic.csv")
-cl = pd.read_csv(OUT / "clusters.csv")
+import config
+
+OUT = config.ensure(config.OUT_OUTCOMES)
+SHAP_OUT = config.ensure(config.OUT_PRELIM_SHAP)
+config.log_console(OUT)
+SEED = config.SEED
+d = pd.read_csv(config.ANALYTIC_CSV)
+cl = pd.read_csv(config.CLUSTERS_CSV)
 d["cluster"] = cl["cluster"]
-feats = [c for c in d.columns if c.startswith("f_")]
-OUTCOMES = ["reading_strict", "numeracy_strict", "reading_lenient", "numeracy_lenient",
-            "reading_strict_incl"]
+feats = [c for c in d.columns if c.startswith(config.FEATURE_PREFIX)]
+OUTCOMES = config.OUTCOMES_ALL
 
 n_psu = d[["stratum", "psu"]].drop_duplicates().shape[0]
 n_strata = d["stratum"].nunique()
 DF = n_psu - n_strata
+pd.DataFrame([dict(n_psu=n_psu, n_strata=n_strata, design_df=DF)]).to_csv(OUT / "design_summary.csv", index=False)
 
 
 # ------------------------------------------------------------ design-based estimate
@@ -102,12 +108,14 @@ cv = StratifiedKFold(5, shuffle=True, random_state=SEED)
 pred = cross_val_predict(model, Xd, y, cv=cv)
 print(f"\n=== {mname} predicting cluster from the original features ===")
 print(f"5-fold CV accuracy = {(pred == y).mean():.3f}  (explanatory only: labels derive from these variables)")
+pd.DataFrame([dict(model=mname, cv_folds=5, accuracy=round((pred == y).mean(), 3))]
+             ).to_csv(OUT / "classifier_accuracy.csv", index=False)
 model.fit(Xd, y)
 sv = shap.TreeExplainer(model).shap_values(Xd)
 sv = np.stack(sv, axis=-1) if isinstance(sv, list) else sv  # (n, features, classes)
 
 glob = pd.Series(np.abs(sv).mean(axis=(0, 2)), index=Xd.columns).sort_values(ascending=False)
-glob.rename("mean_abs_shap").to_csv(OUT / "shap_global.csv")
+glob.rename("mean_abs_shap").to_csv(SHAP_OUT / "shap_global.csv")
 print("\nTop global features (mean |SHAP|):\n", glob.head(10).round(3).to_string())
 
 top = []
@@ -123,10 +131,10 @@ for j, c in enumerate(sorted(d["cluster"].unique())):
     shap.summary_plot(sv[:, :, j], Xd, max_display=10, show=False)
     plt.title(f"Cluster {c}")
     plt.tight_layout()
-    plt.savefig(OUT / f"shap_cluster_{c}.png", dpi=130)
+    plt.savefig(SHAP_OUT / f"shap_cluster_{c}.png", dpi=130)
     plt.close()
 topdf = pd.DataFrame(top)
-topdf.to_csv(OUT / "shap_by_cluster.csv", index=False)
+topdf.to_csv(SHAP_OUT / "shap_by_cluster.csv", index=False)
 print("\nTop features per cluster (member_minus_other > 0 = more common in cluster):")
 print(topdf.to_string(index=False))
 print("\nSaved outputs to", OUT)

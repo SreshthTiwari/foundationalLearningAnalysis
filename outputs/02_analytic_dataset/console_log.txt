@@ -1,0 +1,42 @@
+Analytic sample: 368 children (Stage A = 394)
+
+=== Outcomes ===
+reading_status:
+ reading_status
+proficient               151
+failed_practice          100
+below_90pct_words         41
+comprehension_not_all     40
+not_assessed              36
+reading_strict    n=332  unweighted= 45.5%  weighted= 44.1%
+reading_lenient   n=332  unweighted= 55.4%  weighted= 53.3%
+reading_strict_incl n=368  unweighted= 42.1%  weighted= 40.5%
+numeracy_strict   n=368  unweighted= 29.9%  weighted= 28.9%
+numeracy_lenient  n=368  unweighted= 52.2%  weighted= 51.6%
+Numeracy task pass rates (unweighted): {'number_reading': np.float64(62.5), 'number_discrimination': np.float64(76.9), 'addition': np.float64(59.0), 'patterns': np.float64(38.6)}
+
+=== Features: missing share and levels ===
+f_wealth           missing= 0.0%  lower_40=152, upper_40=138, middle=78
+f_mother_edu       missing= 0.5%  upper_sec=179, post_sec=118, lower_sec_or_less=69, nan=2
+f_area             missing= 0.0%  rural=180, GKMA=99, other_urban=89
+f_books            missing= 0.3%  many_10plus=161, few_0_4=146, some_5_9=60, nan=1
+f_hw_help          missing= 0.0%  yes=339, no=21, no_homework=8
+f_pta              missing= 2.2%  yes=285, no=75, nan=8
+f_school_visit     missing= 0.0%  yes=288, no=80
+f_disability       missing= 0.0%  no=340, yes=28
+f_emo_difficulty   missing= 0.3%  rarely=331, monthly_or_more=36, nan=1
+f_psych_aggr       missing= 0.0%  yes=274, no=94
+f_phys_punish      missing= 0.0%  yes=226, no=142
+f_online_learning  missing= 0.0%  daily=271, weekly=68, rarely_never=29
+f_digital_resources missing= 0.0%  home_internet_and_own_device=268, limited_or_none=100
+f_econ_work        missing= 0.0%  no=329, yes=39
+
+Digital resources vs online learning:
+f_digital_resources    home_internet_and_own_device  limited_or_none
+CB10D                                                               
+ALMOST EVERY  DAY                               218               53
+AT LEAST ONCE A WEEK                             44               24
+LESS THAN ONCE A WEEK                             6                5
+NOT AT ALL                                        0               18
+
+Saved /Users/sreshthtiwari/Desktop/jamaica_research/outputs/02_analytic_dataset/analytic.csv (368, 37)

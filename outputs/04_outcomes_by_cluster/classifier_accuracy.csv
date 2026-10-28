@@ -1,0 +1,2 @@
+model,cv_folds,accuracy
+XGBoost,5,0.899
