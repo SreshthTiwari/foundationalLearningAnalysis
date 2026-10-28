@@ -1,0 +1,15 @@
+variable,cramers_v
+disability,0.8
+emo_difficulty,0.536
+digital_resources,0.534
+wealth,0.461
+online_learning,0.393
+books,0.332
+pta,0.292
+mother_edu,0.263
+phys_punish,0.23
+hw_help,0.228
+econ_work,0.213
+psych_aggr,0.175
+school_visit,0.146
+area,0.131

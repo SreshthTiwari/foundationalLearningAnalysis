@@ -1,0 +1,4 @@
+features,n_dummies,accuracy,balanced_accuracy
+all features,34,0.921 ± 0.003,0.900 ± 0.007
+"SES only (wealth, mother_edu, area)",9,0.605 ± 0.011,0.463 ± 0.019
+without SES,25,0.822 ± 0.008,0.824 ± 0.011
