@@ -144,6 +144,116 @@ The whole analysis runs as seven scripts in order, with a fixed random seed (42)
 
 ---
 
+## Design choices and why
+
+Every analysis involves choices: who to include, what to measure, which method to use. This section lists the main ones, what the alternatives were, and the reason given. Each reason is tagged:
+
+- **[Documented]**: the project's README or code comments state the reason.
+- **[Inferred]**: no reason is written down; this is the most likely one, based on the code and outputs. It may not be what the author intended.
+- **[Not recorded]**: no reason is stated and none is obvious.
+
+### A. Who is in the sample
+
+| Choice | Alternatives | Why |
+|---|---|---|
+| Only children in **Grades 2–3** (394 children) | All school-age children in the file (2,725) | **[Documented]** The project is about the foundational learning indicator (SDG 4.1.1a). **[Inferred]** That indicator is defined for Grades 2–3, which is why only those grades got the reading and maths test. |
+| Must be attending **primary school** this year | Include out-of-school children | **[Inferred]** The grade question is only meaningful for pupils in school. The effect is that out-of-school children are not represented at all. |
+| Must have **completed the interview** (368 of 394) | Keep the 26 who didn't | **[Inferred]** Without the interview there is no reading or maths result. |
+| Use only the **child file (`fs.sav`)** | Also use the household, women's and other MICS files | **[Documented]** The README lists the other files as unused. **[Inferred]** Every variable the project needed (wealth, mother's education, area, outcomes) already sits in this file. |
+
+**What it didn't check:** the 26 children who didn't complete the interview look somewhat different from the 368 who did (more in Kingston, more boys, fewer in the second-poorest wealth group). The group is tiny, the differences weren't tested, and the code doesn't adjust for it, so some drop-out bias can't be ruled out.
+
+### B. How reading and maths were measured
+
+| Choice | Alternatives | Why |
+|---|---|---|
+| **Strict official rules** as the main outcome (reading: 90% of words and all 5 questions right; maths: every item right) | Looser rules, such as 3 of 5 questions | **[Documented]** Checked against the MICS6 manual. The handover document's "3 of 5" rule isn't in the manual. The looser versions are kept as a check, and the ordering of groups is the same under all of them. |
+| Children who **failed the practice round count as "not proficient"** | Treat them as missing | **[Documented]** The manual does this. Note this is large: 100 of the 368 children (27%) are in this category, so it strongly affects the overall reading rate. |
+| The **36 children never given the reading task** are left out of the main reading result (leaving 332) | Count them as "not proficient" | **[Documented]** The manual divides by all children, so that version is also reported. The two give similar results (44% vs 41%). |
+| Maths items skipped because the child got too many wrong count as wrong | Treat skipped items as missing | **[Documented]** The MICS rule. |
+| The flipped answer codes in the reading data were reversed | Trust the manual's codes | **[Documented]** Checked against two internal consistency tests. A wrong guess here would have broken every reading result. |
+
+### C. Which information describes each child (the 14 features)
+
+Step 01 audited about 50 candidate questions. Only 14 variables made it into the grouping. The README says which were chosen but not why the rest were dropped, so most of the reasons below are inferred.
+
+| Dropped | Reason |
+|---|---|
+| Hours-worked and dangerous-work questions (`CL3`, `CL4`, `CL5`, `CL13`) | **[Inferred]** Mostly not asked: 90% blank for the first three and 49% for hours. They only apply to children who work. |
+| Chores (fetching water, cooking, shopping, ...) | **[Not recorded]** Only paid, family-business or income work is used for "child works". |
+| Several functioning and emotional questions (`FCF19`–`FCF24`) | **[Inferred]** The overall disability measure (`fsdisability`) and the two anxiety/sadness questions are used instead. |
+| Health insurance, school report, parish, sex, grade, age | **[Documented]** Kept as descriptive only, not used to form groups. **[Inferred]** Parish has 14 categories, too many for 368 children. |
+| A finer wealth score (`wscore`) | **[Not recorded]** Only 3 wealth levels were used. The README lists the finer score as a to-do. |
+
+**How the answers were simplified into categories** (all **[Not recorded]**, but sensible for a small sample):
+- Wealth: 5 groups reduced to 3 (poorest 40%, middle 20%, richest 40%).
+- Mother's education: 4 levels reduced to 3.
+- Books at home: 0–4, 5–9 and 10 or more.
+- Discipline and work: several questions combined into "any yes".
+- With only 368 children, fewer, bigger categories mean fewer tiny cells, which tends to give steadier groups.
+
+**Missing answers:** 12 values in total were filled with the most common answer (up to 8 per question, in 4 questions). **[Documented]** The code notes that gaps are under 3% per question. Gaps that exist only because a question wasn't asked were never filled.
+
+**The online-learning fix:** **[Documented]** the internet and device questions were only asked of children who did online learning. Left separate, the 18 children who did none formed their own artificial group at every number of groups. Merging them into one "digital resources" measure removed it.
+
+### D. Which method found the groups
+
+| Choice | Alternatives | Why |
+|---|---|---|
+| **MCA, then k-means** | Latent class analysis, or FAMD (another method for mixed data) | **[Documented]** Adapted from the PISA reference paper (Alvarez-Garcia et al., 2024). **[Inferred]** k-means needs numbers, and the answers are categories, so MCA converts them first. The README lists latent class analysis and FAMD as untried checks. |
+| **Survey weights** used in k-means | Unweighted | **[Inferred]** So the groups reflect Jamaica's children, not just who happened to be sampled. The MCA step itself is not weighted. |
+| **6 summary dimensions** | 3 or 4 | **[Documented]** A rule keeps dimensions above a size threshold, with a cap at 6. **[Not recorded]** In practice the cap decided it: 8 dimensions pass the threshold. The results show **3–4 dimensions are more stable**, and re-running with fewer is on the to-do list. |
+| **20 random restarts** in k-means | Fewer or more | **[Not recorded]** Step 06 used 50. |
+
+### E. How many groups (k)
+
+The main rule in Step 03 picks the number of groups (from 3 to 6) with the **highest stability (bootstrap ARI)**, among options where **the smallest group is at least 8% of children**. Two stability measures were used, both from re-running the grouping on reshuffled data:
+- **ARI:** how much the grouping agrees with the original (1 = identical).
+- **Jaccard:** how well each individual group is reproduced. Above 0.75 is stable, 0.6–0.75 indicative, below 0.5 dissolves. **[Documented]** The code states these cut-offs.
+
+Results with the 6 dimensions actually used (from Step 06):
+
+| Groups | Stability (ARI) | Weakest group's Jaccard | Smallest group | Verdict |
+|---|---|---|---|---|
+| 2 | 0.61 | 0.75 | 152 | Only a wealth/digital split. Excluded because the rule starts at 3. |
+| **3** | **0.67** | **0.60** | **31** | **Chosen: highest stability among options meeting the size rule.** |
+| 4 | 0.52 | 0.50 | 36 | Less stable. Fails the 8% rule in Step 03 (29 children). Kept as exploratory. |
+| 5 | 0.46 | 0.48 | 20 | Too small and unstable. |
+| 6–8 | 0.52–0.54 | 0.41–0.51 | 15–20 | Too small. Each group is driven by a single answer. |
+
+**Why not 2?** **[Documented]** Two groups is only a wealth-and-digital split. **[Inferred]** The rule starts at 3 to get more than a rich/poor division. This is a judgement call: k=2 is actually the most reproducible on several measures.
+
+**Why not 5 or more?** **[Documented]** Clusters of about 20 or fewer, each defined by one answer. This holds at 6 dimensions. At 4 dimensions, k=5 has a smallest group of 27 and a good stability score (0.71, slightly above k=3's 0.68), so the rejection depends on the 6-dimension setting.
+
+**The 8% size rule** is **[Not recorded]** as to why 8%. It sits just below the smallest chosen group (8.4%), so it fits k=3. The README says "at least 25 children", which is a slightly different rule.
+
+### F. How outcomes were compared across groups
+
+| Choice | Why |
+|---|---|
+| **Weighted percentages with design-based confidence intervals** that account for strata and clusters (PSUs) | **[Documented]** MICS is a complex survey, so ordinary formulas give intervals that are too narrow. One stratum has a single PSU, handled with a standard adjustment. |
+| **Logistic regression** (outcome is yes or no), run twice: M0 (group, grade, age) and M1 (also wealth and mother's education) | **[Documented]** Comparing the two tests whether the groups carry information beyond wealth and mother's education. |
+| **Written in Python instead of R's `survey` package** | **[Not recorded]** Probably to keep the whole project in one language. A built-in self-check compares the code with a standard library on test data, to confirm the variance formula. |
+
+### G. How the groups were explained
+
+| Choice | Why |
+|---|---|
+| **Random Forest and XGBoost** classifiers | **[Documented]** Follows the PISA reference paper. **[Inferred]** Tree-based models work well with category answers and are what SHAP handles best. |
+| **Shallow trees, no tuning, class weights** | **[Documented]** Chosen for the small sample (368, smallest group 31). Tuning on so few children would mostly fit noise. |
+| **SHAP on children the model hadn't seen** | **[Documented]** So each child is explained by a model that never saw them. |
+| **Wealth-only and without-wealth tests** | **[Documented]** To check whether the groups are just wealth bands. |
+
+### Choices that deserve a second look
+
+These come from reading the code and outputs. None is an error, but they affect how far the results can be trusted:
+
+1. **The 3-group solution depends on the random start.** At 6 dimensions, re-running with different random seeds gave quite different 3-group solutions in some runs (agreement as low as 0.42). At 3 dimensions it is steady (0.92). The group of 31 is most likely the fragile one.
+2. **The number of dimensions was set by a cap, not by the data.** The rule would have kept 8, and the cap forced 6. Using 3–4 looks more stable.
+3. **Wealth and mother's education are both inputs to the groups and controls in the regression.** The "reading gap survives wealth" result therefore describes what's left after removing the part of the groups that wealth explains.
+4. **Several choices were made after seeing results,** including which k and which outcome definition. The project's own caveats acknowledge this, and it means p-values are somewhat optimistic.
+5. **27% of children failed the reading practice round,** and they count as not proficient. That is the official rule, but it has a large effect on the reading rate and may reflect the test setup (such as language of instruction) rather than skill.
+
 ## Limits to keep in mind
 - **Small sample.** Only 368 children (332 for reading). Group 3 has just 31, so its results are very uncertain.
 - **Weak groups.** The children form more of a continuum than clearly separate types. The groups are a useful summary, not sharply defined categories. They were only moderately stable when the data was reshuffled.
